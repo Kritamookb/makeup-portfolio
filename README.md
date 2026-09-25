@@ -1,4 +1,4 @@
-# BLOOM Makeup Artist — เว็บ Portfolio
+# Bigjimakeup — เว็บ Portfolio
 
 เว็บ portfolio ช่างแต่งหน้าที่ภูเก็ต · Next.js 16 (App Router) + Tailwind CSS 4 · สองภาษา ไทย/อังกฤษ
 
@@ -14,6 +14,10 @@ npm run lint
 ```
 app/[lang]/layout.tsx   root layout, ฟอนต์, metadata, JSON-LD (BeautySalon)
 app/[lang]/page.tsx     ลำดับ section ของหน้าเดียวจบ
+app/[lang]/not-found.tsx  หน้า 404 สองภาษา
+app/icon.png            favicon (monogram ชั่วคราว — เปลี่ยนเป็นโลโก้จริงได้)
+app/apple-icon.png      ไอคอนตอนบันทึกลงจอโฮม iOS
+app/manifest.ts         web app manifest
 app/globals.css         โทนสีและฟอนต์ทั้งเว็บ (@theme ของ Tailwind 4)
 content/site.ts         ★ ข้อมูลทั้งเว็บอยู่ที่นี่ไฟล์เดียว
 lib/i18n.ts             locale + helper
@@ -26,13 +30,16 @@ public/images/          รูปทั้งหมด
 
 ทุกจุดที่ต้องแก้ทำเครื่องหมาย `PLACEHOLDER` ไว้ใน `content/site.ts`:
 
-1. **ชื่อแบรนด์และชื่อช่าง** — `site.brand`
-2. **ช่องทางติดต่อ** — `site.contact` (เบอร์, LINE, IG, FB, อีเมล)
+1. **ช่องทางติดต่อ** — `site.contact` (เบอร์, LINE, IG, FB, อีเมล)
+   - ตอนนี้ยังเป็นค่าที่เดาจากชื่อแบรนด์ (`bigjimakeup`) ต้องให้ผู้ว่าจ้างยืนยันของจริงทุกช่อง
    - ถ้าเป็น LINE OA ให้เปลี่ยน `lineUrl` เป็นลิงก์ `https://lin.ee/xxxxxxx`
-3. **ราคาและแพ็กเกจ** — `site.services` (ตอนนี้เป็นราคาตลาดโดยประมาณ ต้องให้ผู้ว่าจ้างยืนยัน)
-4. **รีวิว** — `site.testimonials` ต้องเป็นรีวิวจริง และขออนุญาตลูกค้าก่อนลงชื่อ
-5. **โดเมน** — `site.seo.url` ใส่โดเมนจริงหลัง deploy (มีผลกับ sitemap, OG, canonical)
-6. **รูปภาพ** — ดูหัวข้อถัดไป
+2. **ราคาและแพ็กเกจ** — `site.services` (ตอนนี้เป็นราคาตลาดโดยประมาณ ต้องให้ผู้ว่าจ้างยืนยัน)
+3. **รีวิว** — `site.testimonials` ต้องเป็นรีวิวจริง และขออนุญาตลูกค้าก่อนลงชื่อ
+   - `site.rating` ตอนนี้เป็น `null` = ไม่ส่ง AggregateRating ให้ Google
+     ใส่ได้เฉพาะตัวเลขจริงเท่านั้น ตัวเลขปลอมผิดนโยบายและโดน manual action ได้ทั้งเว็บ
+   - `site.stats` (8+ ปี / 500+ เจ้าสาว / 4.9) และประวัติใน `site.about` ก็ยังเป็นของสมมติ ต้องยืนยันเช่นกัน
+4. **โดเมน** — `site.seo.url` ตอนนี้ตั้งไว้ `https://bigjimakeup.com` ถ้าใช้โดเมนอื่นต้องแก้ (มีผลกับ sitemap, OG, canonical)
+5. **รูปภาพ** — ดูหัวข้อถัดไป
 
 ### รูปภาพ
 
@@ -62,14 +69,39 @@ public/images/          รูปทั้งหมด
 ลิงก์ติดต่อทุกอันพ่วง `ref=website` ไว้ และหัวข้อข้อความที่ฟอร์มสร้างจะขึ้นต้นว่า
 "สอบถามคิวแต่งหน้า (จากเว็บไซต์)" เพื่อให้ผู้ว่าจ้างแยกออกว่างานไหนมาจากเว็บ
 
-แนะนำเพิ่มก่อนขึ้นจริง:
-- ติด Google Analytics 4 หรือ Vercel Analytics แล้วตั้ง event ที่ปุ่ม LINE / โทร / ส่งฟอร์ม
+### Google Analytics
+
+คัดลอก `.env.example` เป็น `.env.local` แล้วใส่ Measurement ID:
+
+```
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+```
+
+ถ้าไม่ตั้งค่า เว็บจะไม่โหลดสคริปต์ GA เลย (ทุกอย่างอื่นทำงานปกติ)
+
+event ที่ยิงไว้แล้ว — ตั้งเป็น conversion ใน GA4 ได้เลย:
+
+| event | ยิงเมื่อ | พารามิเตอร์ |
+| --- | --- | --- |
+| `contact_line` | กดลิงก์ LINE ที่ไหนก็ได้ | `location` = id ของ section |
+| `contact_phone` | กดเบอร์โทร | `location` |
+| `contact_email` | กดอีเมล | `location` |
+| `contact_instagram` | กดลิงก์ IG | `location` |
+| `booking_cta` | กดปุ่มที่พาไป `#booking` | `location` |
+| `booking_submit` | ส่งฟอร์มจอง | `method` = line/email/copy, `service` |
+
+การดักคลิกอยู่ที่ `components/Analytics.tsx` (ดักที่ระดับ document ไม่ต้องใส่ onClick ทีละปุ่ม)
+ส่วนฟอร์มยิง event เองใน `components/Booking.tsx`
+
+### แนะนำเพิ่ม
+
 - ทำ Google Business Profile ของร้าน แล้วลิงก์มาที่เว็บ (คนค้น "ช่างแต่งหน้าภูเก็ต" ส่วนใหญ่มาจากตรงนี้)
 
 ## SEO ที่ทำไว้แล้ว
 
 - หน้า static แยกภาษา `/th` `/en` พร้อม canonical และ hreflang
 - JSON-LD `BeautySalon` (พื้นที่ให้บริการ ภูเก็ต/พังงา/กระบี่ + รายการบริการ) และ `FAQPage`
+  (AggregateRating จะส่งก็ต่อเมื่อ `site.rating` ไม่ใช่ `null`)
 - OpenGraph / Twitter card, `sitemap.xml`, `robots.txt`
 
 ## Deploy

@@ -5,6 +5,7 @@ import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { site } from "@/content/site";
 import { lineHref, mailtoHref, telHref } from "@/lib/links";
+import { track } from "@/lib/track";
 import type { Lang } from "@/lib/i18n";
 
 const copy = {
@@ -103,8 +104,12 @@ export default function Booking({ lang }: { lang: Lang }) {
     return true;
   };
 
+  const submitted = (method: string) =>
+    track("booking_submit", { method, service: form.service || "unspecified" });
+
   const sendViaLine = async () => {
     if (!(await copyMessage())) return;
+    submitted("line");
     window.open(lineHref, "_blank", "noopener,noreferrer");
   };
 
@@ -113,6 +118,7 @@ export default function Booking({ lang }: { lang: Lang }) {
       setStatus("missing");
       return;
     }
+    submitted("email");
     window.location.href = mailtoHref(lang, message);
   };
 
@@ -214,7 +220,11 @@ export default function Booking({ lang }: { lang: Lang }) {
                 </button>
                 <button
                   type="button"
-                  onClick={() => void copyMessage()}
+                  onClick={() => {
+                    void copyMessage().then((ok) => {
+                      if (ok) submitted("copy");
+                    });
+                  }}
                   className="text-sm text-mauve underline decoration-blush underline-offset-4 hover:text-ink"
                 >
                   {copy.copy[lang]}

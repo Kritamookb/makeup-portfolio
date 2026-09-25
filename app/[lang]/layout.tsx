@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { Cormorant_Garamond, IBM_Plex_Sans_Thai, Noto_Serif_Thai } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "../globals.css";
+import Analytics from "@/components/Analytics";
 import { site } from "@/content/site";
 import { isLang, locales, type Lang } from "@/lib/i18n";
 
@@ -82,11 +83,15 @@ function businessJsonLd(lang: Lang) {
     },
     areaServed: ["Phuket", "Phang Nga", "Krabi"],
     sameAs: [site.contact.instagramUrl, site.contact.facebookUrl],
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "127",
-    },
+    ...(site.rating
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: site.rating.value,
+            reviewCount: site.rating.count,
+          },
+        }
+      : {}),
     makesOffer: site.services.map((service) => ({
       "@type": "Offer",
       name: service.name[lang],
@@ -102,8 +107,13 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: Promise<{ lang: string }>;
 }) {
-  const { lang } = await params;
-  if (!isLang(lang)) notFound();
+  const { lang: raw } = await params;
+  // path ภาษาที่ไม่รู้จักปล่อยให้ page.tsx เรียก notFound() เอง
+  // ถ้า throw ตรงนี้ not-found.tsx ของ segment เดียวกันจะไม่ถูกใช้
+  const lang: Lang = isLang(raw) ? raw : "th";
+
+  // ยังไม่ได้ตั้งค่า = ไม่โหลดสคริปต์ GA เลย เว็บก็ยังทำงานปกติ
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
   return (
     <html lang={lang} className={`${cormorant.variable} ${notoSerifThai.variable} ${plexThai.variable}`}>
@@ -113,6 +123,8 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd(lang)) }}
         />
         {children}
+        <Analytics />
+        {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
       </body>
     </html>
   );

@@ -8,11 +8,12 @@ import type { L } from "@/lib/i18n";
  */
 
 export const site = {
-  /** PLACEHOLDER: ชื่อแบรนด์ / ชื่อช่าง */
   brand: {
-    name: "BLOOM",
-    full: { th: "BLOOM Makeup Artist", en: "BLOOM Makeup Artist" } as L,
-    artist: { th: "คุณบลูม", en: "Bloom" } as L,
+    name: "Bigjimakeup",
+    /** โลโก้แยกสองท่อนเพื่อไล่น้ำหนักสี — Bigji เข้ม / makeup อ่อน */
+    logo: { lead: "Bigji", trail: "makeup" },
+    full: { th: "Bigjimakeup", en: "Bigjimakeup" } as L,
+    artist: { th: "Bigji", en: "Bigji" } as L,
     tagline: {
       th: "ช่างแต่งหน้าเจ้าสาว จังหวัดภูเก็ต",
       en: "Bridal & Event Makeup Artist in Phuket",
@@ -23,14 +24,14 @@ export const site = {
   contact: {
     phone: "0812345678",
     phoneDisplay: "081-234-5678",
-    lineId: "bloommakeup",
+    lineId: "bigjimakeup",
     /** ลิงก์เพิ่มเพื่อนไลน์ — ถ้าเป็น LINE OA ให้เปลี่ยนเป็น https://lin.ee/xxxxxxx */
-    lineUrl: "https://line.me/ti/p/~bloommakeup",
-    instagram: "bloom.makeup.phuket",
-    instagramUrl: "https://instagram.com/bloom.makeup.phuket",
-    facebook: "BLOOM Makeup Phuket",
-    facebookUrl: "https://facebook.com/bloommakeupphuket",
-    email: "hello@bloommakeup.com",
+    lineUrl: "https://line.me/ti/p/~bigjimakeup",
+    instagram: "bigjimakeup",
+    instagramUrl: "https://instagram.com/bigjimakeup",
+    facebook: "Bigjimakeup",
+    facebookUrl: "https://facebook.com/bigjimakeup",
+    email: "hello@bigjimakeup.com",
     area: {
       th: "ภูเก็ต · พังงา · กระบี่ (เดินทางถึงที่)",
       en: "Phuket · Phang Nga · Krabi (on-location service)",
@@ -41,7 +42,14 @@ export const site = {
     } as L,
   },
 
-  /** สถิติสั้น ๆ ใต้ hero — ใช้สร้างความน่าเชื่อถือ */
+  /**
+   * คะแนนรีวิวรวมที่ส่งให้ Google (schema.org AggregateRating)
+   * ใส่ได้เฉพาะตัวเลขจริงที่นับจากรีวิวจริงเท่านั้น — ตัวเลขปลอมผิดนโยบาย Google
+   * และโดน manual action ได้ทั้งเว็บ ปล่อย null ไว้คือไม่ส่งอะไรเลย ปลอดภัยกว่า
+   */
+  rating: null as { value: string; count: string } | null,
+
+  /** PLACEHOLDER: สถิติใต้ hero — ต้องเป็นตัวเลขจริงจากผู้ว่าจ้าง */
   stats: [
     {
       value: "8+",
@@ -298,10 +306,10 @@ export const site = {
 
   seo: {
     /** PLACEHOLDER: โดเมนจริงหลัง deploy */
-    url: "https://bloommakeup.example.com",
+    url: "https://bigjimakeup.com",
     title: {
-      th: "ช่างแต่งหน้าภูเก็ต · แต่งหน้าเจ้าสาว ถึงที่ | BLOOM Makeup Artist",
-      en: "Phuket Makeup Artist · Bridal & Event Makeup | BLOOM Makeup Artist",
+      th: "ช่างแต่งหน้าภูเก็ต · แต่งหน้าเจ้าสาว ถึงที่ | Bigjimakeup",
+      en: "Phuket Makeup Artist · Bridal & Event Makeup | Bigjimakeup",
     } as L,
     description: {
       th: "ช่างแต่งหน้าเจ้าสาวมืออาชีพในภูเก็ต บริการถึงที่ทั้งโรงแรม รีสอร์ท และริมหาด แต่งทนตลอดวัน ดูเป็นผิวจริงในภาพถ่าย ประสบการณ์กว่า 8 ปี",

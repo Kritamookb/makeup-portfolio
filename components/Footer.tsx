@@ -9,7 +9,10 @@ export default function Footer({ lang }: { lang: Lang }) {
     <footer className="border-t border-blush/60 bg-shell/70 pt-14 pb-28 md:pb-14">
       <div className="container-x grid gap-10 md:grid-cols-3">
         <div>
-          <span className="font-display text-2xl tracking-[0.3em] text-ink">{site.brand.name}</span>
+          <span className="font-display text-[1.7rem] text-ink">
+            {site.brand.logo.lead}
+            <span className="font-light text-clay">{site.brand.logo.trail}</span>
+          </span>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">
             {site.brand.tagline[lang]} · {site.contact.area[lang]}
           </p>

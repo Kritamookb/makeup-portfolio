@@ -42,11 +42,12 @@ export default function Header({ lang }: { lang: Lang }) {
     >
       <div className="container-x flex h-16 items-center justify-between gap-4 md:h-20">
         <Link href={`/${lang}`} className="group flex flex-col leading-none">
-          <span className="font-display text-xl tracking-[0.3em] text-ink md:text-2xl">
-            {site.brand.name}
+          <span className="font-display text-2xl text-ink md:text-[1.7rem]">
+            {site.brand.logo.lead}
+            <span className="font-light text-clay">{site.brand.logo.trail}</span>
           </span>
-          <span className="mt-1 text-[0.6rem] tracking-[0.2em] text-clay uppercase">
-            Makeup Artist
+          <span className="mt-1 text-[0.6rem] tracking-[0.25em] text-clay uppercase">
+            Phuket
           </span>
         </Link>
 
