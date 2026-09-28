@@ -69,7 +69,7 @@ export const site = {
     {
       id: "bridal",
       name: { th: "แต่งหน้าเจ้าสาว", en: "Bridal Makeup" } as L,
-      price: { th: "เริ่มต้น 6,500 บาท", en: "From ฿6,500" } as L,
+      price: { th: "เริ่มต้น 15,000 บาท", en: "From ฿15,000" } as L,
       desc: {
         th: "ดูแลตั้งแต่ทดลองแต่ง ยันเก็บงานหลังพิธี พร้อมทำผมและติดขนตา แต่งทนได้ทั้งวันในอากาศร้อนชื้นของภูเก็ต",
         en: "From the trial session through post-ceremony touch-ups, including hairstyling and lashes — built to last a full day in Phuket's heat and humidity.",
@@ -83,7 +83,7 @@ export const site = {
     {
       id: "bridal-party",
       name: { th: "เพื่อนเจ้าสาว & ครอบครัว", en: "Bridal Party & Family" } as L,
-      price: { th: "ท่านละ 1,800 บาท", en: "฿1,800 per person" } as L,
+      price: { th: "ท่านละ 5,000 บาท", en: "฿5,000 per person" } as L,
       desc: {
         th: "แต่งหน้าทำผมให้เพื่อนเจ้าสาว คุณแม่ และญาติ ๆ ในโทนที่เข้าชุดกันทั้งงาน มีทีมช่างเสริมเมื่อจองหลายท่าน",
         en: "Coordinated looks for bridesmaids, mothers and relatives. Additional artists are arranged for larger groups.",
@@ -97,7 +97,7 @@ export const site = {
     {
       id: "prewedding",
       name: { th: "พรีเวดดิ้ง & ถ่ายภาพ", en: "Pre-wedding & Photoshoot" } as L,
-      price: { th: "เริ่มต้น 4,500 บาท", en: "From ฿4,500" } as L,
+      price: { th: "เริ่มต้น 8,000 บาท", en: "From ฿8,000" } as L,
       desc: {
         th: "แต่งหน้าสำหรับถ่ายภาพริมทะเล ในสตูดิโอ หรือโลเคชันในภูเก็ต เปลี่ยนลุคได้ตามคอนเซปต์ พร้อมดูแลตลอดกอง",
         en: "Makeup for beach, studio or on-location shoots around Phuket, with look changes through the day and on-set care.",
@@ -111,7 +111,7 @@ export const site = {
     {
       id: "event",
       name: { th: "งานอีเวนต์ & งานเลี้ยง", en: "Events & Parties" } as L,
-      price: { th: "เริ่มต้น 2,500 บาท", en: "From ฿2,500" } as L,
+      price: { th: "เริ่มต้น 5,000 บาท", en: "From ฿5,000" } as L,
       desc: {
         th: "งานแต่งเพื่อน งานรับปริญญา งานเลี้ยงบริษัท หรือปาร์ตี้ริมหาด เลือกได้ทั้งลุคใสธรรมชาติและลุคจัดเต็ม",
         en: "Graduations, galas, beach parties or company events — from soft natural looks to full glam.",
@@ -125,7 +125,7 @@ export const site = {
     {
       id: "lesson",
       name: { th: "คอร์สสอนแต่งหน้า", en: "Makeup Lessons" } as L,
-      price: { th: "คอร์สละ 3,500 บาท", en: "฿3,500 per course" } as L,
+      price: { th: "คอร์สละ 8,000 บาท", en: "฿8,000 per course" } as L,
       desc: {
         th: "สอนตัวต่อตัว 3 ชั่วโมง เรียนรู้การแต่งหน้าให้เข้ากับโครงหน้าตัวเอง พร้อมลิสต์เครื่องสำอางที่เหมาะกับผิวคุณ",
         en: "A three-hour one-to-one class on working with your own features, plus a product list matched to your skin.",
@@ -139,7 +139,7 @@ export const site = {
     {
       id: "tourist",
       name: { th: "นักท่องเที่ยว & ถ่ายภาพหาด", en: "Holiday & Beach Shoots" } as L,
-      price: { th: "เริ่มต้น 2,000 บาท", en: "From ฿2,000" } as L,
+      price: { th: "เริ่มต้น 5,000 บาท", en: "From ฿5,000" } as L,
       desc: {
         th: "บริการถึงโรงแรมและรีสอร์ททั่วภูเก็ต จองล่วงหน้าได้จากต่างประเทศ สื่อสารภาษาอังกฤษได้",
         en: "Hotel and resort visits across Phuket. Book ahead from overseas — English-speaking service.",
