@@ -21,6 +21,7 @@ export default function Analytics() {
       if (href.startsWith("tel:")) track("contact_phone", { location });
       else if (href.includes("line.me") || href.includes("lin.ee")) track("contact_line", { location });
       else if (href.startsWith("mailto:")) track("contact_email", { location });
+      else if (href.includes("wa.me")) track("contact_whatsapp", { location });
       else if (href.includes("instagram.com")) track("contact_instagram", { location });
       else if (href.includes("facebook.com")) track("contact_facebook", { location });
       else if (href === "#booking") track("booking_cta", { location });

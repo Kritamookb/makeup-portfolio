@@ -20,9 +20,13 @@ export default function Testimonials({ lang }: { lang: Lang }) {
           {site.testimonials.map((item, index) => (
             <Reveal key={item.name} delay={index * 70}>
               <figure className="flex h-full flex-col rounded-2xl border border-blush/60 bg-white/70 p-7">
-                <div className="text-sm tracking-[0.3em] text-gold" aria-label="5 / 5">
+                <p
+                  role="img"
+                  aria-label={lang === "th" ? "5 จาก 5 ดาว" : "5 out of 5 stars"}
+                  className="text-sm tracking-[0.3em] text-gold"
+                >
                   ★★★★★
-                </div>
+                </p>
                 <blockquote className="mt-4 grow text-sm leading-relaxed text-mauve">
                   “{item.quote[lang]}”
                 </blockquote>

@@ -1,10 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { site } from "@/content/site";
-import { lineHref, mailtoHref, telHref } from "@/lib/links";
+import {
+  lineDisplay,
+  lineHref,
+  lineOaMessageHref,
+  mailtoHref,
+  telHref,
+  whatsappHref,
+} from "@/lib/links";
 import { track } from "@/lib/track";
 import type { Lang } from "@/lib/i18n";
 
@@ -30,19 +37,38 @@ const copy = {
   },
   required: { th: "จำเป็น", en: "required" },
   sendLine: { th: "ส่งผ่าน LINE", en: "Send via LINE" },
+  sendWhatsapp: { th: "ส่งทาง WhatsApp", en: "Send via WhatsApp" },
   sendMail: { th: "ส่งทางอีเมล", en: "Send by email" },
   copy: { th: "คัดลอกข้อความ", en: "Copy message" },
   copied: { th: "คัดลอกแล้ว — วางในแชทได้เลย", en: "Copied — paste it into the chat" },
+  chatOpened: {
+    th: "เปิดแชทแล้ว — ข้อความพิมพ์ไว้ให้แล้ว กดส่งได้เลยครับ",
+    en: "The chat is open with your message ready — just tap send.",
+  },
   copyFailed: {
     th: "คัดลอกอัตโนมัติไม่สำเร็จ — กดค้างที่ข้อความด้านล่างเพื่อคัดลอก แล้ววางในแชท",
     en: "Couldn't copy automatically — select the text below, copy it and paste it into the chat.",
   },
   missing: {
-    th: "กรอกชื่อ ช่องทางติดต่อ และวันที่จัดงานก่อนนะคะ",
+    th: "กรอกชื่อ ช่องทางติดต่อ และวันที่จัดงานก่อนนะครับ",
     en: "Please add your name, a contact and the event date first.",
+  },
+  pastDate: {
+    th: "วันที่จัดงานผ่านไปแล้ว — ลองเช็กวันหรือปีอีกครั้งนะครับ",
+    en: "That date has already passed — please check the day and year.",
   },
   channels: { th: "หรือติดต่อโดยตรง", en: "Or reach out directly" },
 };
+
+/** วันนี้ตามเวลาเครื่องลูกค้า ในรูป YYYY-MM-DD ให้ตรงกับค่าของ input type="date" */
+function localToday() {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${now.getFullYear()}-${month}-${day}`;
+}
+
+const noSubscribe = () => () => {};
 
 type Form = {
   name: string;
@@ -58,7 +84,11 @@ const EMPTY: Form = { name: "", contact: "", date: "", venue: "", service: "", p
 
 export default function Booking({ lang }: { lang: Lang }) {
   const [form, setForm] = useState<Form>(EMPTY);
-  const [status, setStatus] = useState<"idle" | "copied" | "copyFailed" | "missing">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "copied" | "copyFailed" | "missing" | "pastDate" | "chatOpened"
+  >("idle");
+  // หน้าเป็น static — ตอน build ยังไม่รู้ว่า "วันนี้" คือวันไหน เลยให้เบราว์เซอร์ใส่ให้หลังโหลด
+  const today = useSyncExternalStore(noSubscribe, localToday, () => "");
 
   // การ์ดบริการด้านบนกดมาแล้วให้เลือกบริการนั้นไว้ให้เลย
   useEffect(() => {
@@ -93,9 +123,13 @@ export default function Booking({ lang }: { lang: Lang }) {
 
   const complete = Boolean(form.name && form.contact && form.date);
 
+  // พิมพ์วันที่เองก็ข้าม min ได้ ต้องเช็กซ้ำตรงนี้
+  const pastDate = Boolean(today && form.date && form.date < today);
+
   const requireComplete = () => {
     if (!complete) setStatus("missing");
-    return complete;
+    else if (pastDate) setStatus("pastDate");
+    return complete && !pastDate;
   };
 
   /**
@@ -121,10 +155,34 @@ export default function Booking({ lang }: { lang: Lang }) {
 
   const sendViaLine = () => {
     if (!requireComplete()) return;
-    copyMessage();
     submitted("line");
+
+    // LINE OA เปิดแชทพร้อมข้อความได้เลย · LINE ส่วนตัวทำไม่ได้ ต้องคัดลอกให้ลูกค้าไปวางเอง
+    const oaId = site.contact.lineOaId;
+    if (oaId) {
+      setStatus("chatOpened");
+      window.open(lineOaMessageHref(oaId, message), "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    copyMessage();
     window.open(lineHref, "_blank", "noopener,noreferrer");
   };
+
+  // WhatsApp พิมพ์ข้อความไว้ให้ได้ทั้งบัญชีส่วนตัวและธุรกิจ ไม่ต้องคัดลอก
+  const sendViaWhatsapp = () => {
+    if (!requireComplete()) return;
+    submitted("whatsapp");
+    setStatus("chatOpened");
+    window.open(whatsappHref(lang, message), "_blank", "noopener,noreferrer");
+  };
+
+  // ปุ่มหลักเป็นแอปที่คนหน้านั้นใช้ — ไทยใช้ LINE นักท่องเที่ยวใช้ WhatsApp
+  const chats = [
+    { label: copy.sendLine[lang], send: sendViaLine },
+    { label: copy.sendWhatsapp[lang], send: sendViaWhatsapp },
+  ];
+  const [primary, secondary] = lang === "th" ? chats : [...chats].reverse();
 
   const sendViaMail = () => {
     if (!requireComplete()) return;
@@ -139,7 +197,7 @@ export default function Booking({ lang }: { lang: Lang }) {
   };
 
   const field = "mt-1.5 w-full rounded-lg border border-blush bg-white/80 px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-rose focus:ring-2 focus:ring-rose/20";
-  const label = "block text-xs tracking-wide text-mauve uppercase";
+  const label = "block text-xs tracking-wide text-mauve uppercase th:tracking-normal";
 
   return (
     <section id="booking" className="scroll-mt-20 bg-cream py-20 md:py-28">
@@ -154,7 +212,7 @@ export default function Booking({ lang }: { lang: Lang }) {
               className="grid gap-5 sm:grid-cols-2"
               onSubmit={(event) => {
                 event.preventDefault();
-                sendViaLine();
+                primary.send();
               }}
             >
               <div>
@@ -175,7 +233,15 @@ export default function Booking({ lang }: { lang: Lang }) {
                 <label className={label} htmlFor="date">
                   {copy.fields.date[lang]} *
                 </label>
-                <input id="date" type="date" className={field} value={form.date} onChange={set("date")} required />
+                <input
+                  id="date"
+                  type="date"
+                  min={today || undefined}
+                  className={field}
+                  value={form.date}
+                  onChange={set("date")}
+                  required
+                />
               </div>
 
               <div>
@@ -225,7 +291,14 @@ export default function Booking({ lang }: { lang: Lang }) {
                   type="submit"
                   className="rounded-full bg-ink px-7 py-3.5 text-sm text-cream transition-colors hover:bg-clay"
                 >
-                  {copy.sendLine[lang]}
+                  {primary.label}
+                </button>
+                <button
+                  type="button"
+                  onClick={secondary.send}
+                  className="rounded-full border border-clay/50 px-7 py-3.5 text-sm text-clay transition-colors hover:border-clay hover:bg-shell"
+                >
+                  {secondary.label}
                 </button>
                 <button
                   type="button"
@@ -246,15 +319,9 @@ export default function Booking({ lang }: { lang: Lang }) {
               <p
                 role="status"
                 aria-live="polite"
-                className={`text-sm sm:col-span-2 ${status === "missing" || status === "copyFailed" ? "text-clay" : "text-mauve"}`}
+                className={`text-sm sm:col-span-2 ${status === "copied" || status === "chatOpened" ? "text-mauve" : "text-clay"}`}
               >
-                {status === "copied"
-                  ? copy.copied[lang]
-                  : status === "missing"
-                    ? copy.missing[lang]
-                    : status === "copyFailed"
-                      ? copy.copyFailed[lang]
-                      : ""}
+                {status === "idle" ? "" : copy[status][lang]}
               </p>
 
               {status === "copyFailed" ? (
@@ -279,7 +346,15 @@ export default function Booking({ lang }: { lang: Lang }) {
                   <a href={lineHref} target="_blank" rel="noopener noreferrer" className="group block">
                     <span className="block text-xs text-muted">LINE</span>
                     <span className="font-display text-xl text-ink group-hover:text-clay">
-                      @{site.contact.lineId}
+                      {lineDisplay}
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <a href={whatsappHref(lang)} target="_blank" rel="noopener noreferrer" className="group block">
+                    <span className="block text-xs text-muted">WhatsApp</span>
+                    <span className="font-display text-xl text-ink group-hover:text-clay">
+                      {site.contact.whatsappDisplay}
                     </span>
                   </a>
                 </li>

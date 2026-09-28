@@ -32,7 +32,7 @@ export default function Services({ lang }: { lang: Lang }) {
                 <h3 className="font-display text-2xl font-normal text-ink">
                   {service.name[lang]}
                 </h3>
-                <p className="mt-2 text-sm tracking-wide text-clay">{service.price[lang]}</p>
+                <p className="mt-2 text-sm tracking-wide text-clay th:tracking-normal">{service.price[lang]}</p>
 
                 <p className="mt-4 text-sm leading-relaxed text-muted">{service.desc[lang]}</p>
 

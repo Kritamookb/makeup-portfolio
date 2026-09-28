@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { site } from "@/content/site";
-import { lineHref } from "@/lib/links";
+import { primaryChat } from "@/lib/links";
 import { other, type Lang } from "@/lib/i18n";
 
 const NAV = [
@@ -17,6 +17,7 @@ const NAV = [
 export default function Header({ lang }: { lang: Lang }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -27,8 +28,17 @@ export default function Header({ lang }: { lang: Lang }) {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    if (!open) return;
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      menuButtonRef.current?.focus();
+    };
+    document.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
     };
   }, [open]);
 
@@ -66,7 +76,9 @@ export default function Header({ lang }: { lang: Lang }) {
         <div className="flex items-center gap-2 md:gap-3">
           <Link
             href={`/${other(lang)}`}
-            className="rounded-full border border-blush px-3 py-1.5 text-xs tracking-wider text-mauve transition-colors hover:border-rose hover:text-ink"
+            hrefLang={other(lang)}
+            lang={other(lang)}
+            className="rounded-full border border-blush px-3 py-1.5 text-xs tracking-wider text-mauve th:tracking-normal transition-colors hover:border-rose hover:text-ink"
             aria-label={lang === "th" ? "Switch to English" : "เปลี่ยนเป็นภาษาไทย"}
           >
             {lang === "th" ? "EN" : "ไทย"}
@@ -80,6 +92,7 @@ export default function Header({ lang }: { lang: Lang }) {
           </a>
 
           <button
+            ref={menuButtonRef}
             type="button"
             onClick={() => setOpen((value) => !value)}
             className="flex h-10 w-10 items-center justify-center rounded-full border border-blush text-ink lg:hidden"
@@ -128,12 +141,12 @@ export default function Header({ lang }: { lang: Lang }) {
               {lang === "th" ? "จองคิว" : "Book now"}
             </a>
             <a
-              href={lineHref}
+              href={primaryChat(lang).href}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 rounded-full border border-clay px-5 py-3 text-center text-sm text-clay"
             >
-              LINE
+              {primaryChat(lang).label}
             </a>
           </div>
         </nav>

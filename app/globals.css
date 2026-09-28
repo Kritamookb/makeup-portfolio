@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
+/* ตัวไทยห้ามยืดระยะตัวอักษร — สระ/วรรณยุกต์จะลอยห่างพยัญชนะ ใช้ th:tracking-normal คู่กับ tracking-* */
+@custom-variant th (&:lang(th));
+
 @theme {
   /* โทนสีหลัก — นู้ด ชมพูอ่อน ทอง
-     clay / mauve / muted ใช้เป็นสีตัวหนังสือด้วย — ต้องเข้มพอให้ได้ 4.5:1 บนพื้น cream และ shell */
+     clay / mauve / muted ใช้เป็นสีตัวหนังสือด้วย — ต้องเข้มพอให้ได้ 4.5:1 บนพื้น cream และ shell
+     gold ใช้กับดาวรีวิว (ไม่ใช่ตัวหนังสือ) — ต้องได้อย่างน้อย 3:1 */
   --color-cream: #fbf7f4;
   --color-shell: #f4eae4;
   --color-blush: #ecccc5;
@@ -11,7 +15,7 @@
   --color-mauve: #836366;
   --color-ink: #3d3033;
   --color-muted: #796769;
-  --color-gold: #c3a86a;
+  --color-gold: #a58742;
   --font-display: var(--font-cormorant), var(--font-noto-serif-thai), Georgia, serif;
   --font-sans: var(--font-plex-thai), ui-sans-serif, system-ui, sans-serif;
 }
@@ -40,7 +44,8 @@
     width: 100%;
     max-width: 78rem;
     margin-inline: auto;
-    padding-inline: 1.25rem;
+    /* แนวนอนบน iPhone ต้องหลบรอยบาก (ดู viewport ใน layout.tsx) */
+    padding-inline: max(1.25rem, env(safe-area-inset-left)) max(1.25rem, env(safe-area-inset-right));
   }
 
   /* เส้นคั่นบาง ๆ ใต้หัวข้อหมวด */
@@ -49,6 +54,12 @@
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--color-clay);
+
+    /* ไทยไม่มีตัวพิมพ์ใหญ่และไม่ยืดระยะ ตัวเล็กเท่าอังกฤษจะดูจมไป เลยขยายขึ้น */
+    &:lang(th) {
+      font-size: 0.875rem;
+      letter-spacing: normal;
+    }
   }
 }
 

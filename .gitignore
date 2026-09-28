@@ -5,3 +5,6 @@ out
 next-env.d.ts
 .DS_Store
 *.tsbuildinfo
+
+# รูปต้นฉบับจากผู้ว่าจ้าง — ไฟล์ใหญ่ ไม่ต้องขึ้น repo (ใช้ตัวที่ครอปแล้วใน public/images)
+/photos-original/

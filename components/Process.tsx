@@ -18,12 +18,15 @@ export default function Process({ lang }: { lang: Lang }) {
 
         <ol className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {site.process.map((item, index) => (
-            <Reveal key={item.step} delay={index * 70}>
-              <li className="relative h-full border-t border-blush pt-6">
-                <span className="font-display text-4xl font-light text-rose/70">{item.step}</span>
-                <h3 className="mt-3 font-display text-xl text-ink">{item.title[lang]}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{item.desc[lang]}</p>
-              </li>
+            <Reveal
+              key={item.step}
+              as="li"
+              delay={index * 70}
+              className="relative h-full border-t border-blush pt-6"
+            >
+              <span className="font-display text-4xl font-light text-rose/70">{item.step}</span>
+              <h3 className="mt-3 font-display text-xl text-ink">{item.title[lang]}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{item.desc[lang]}</p>
             </Reveal>
           ))}
         </ol>

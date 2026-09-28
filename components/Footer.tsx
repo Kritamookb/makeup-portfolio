@@ -1,11 +1,19 @@
 import CurrentYear from "@/components/CurrentYear";
 import { site } from "@/content/site";
-import { facebookHref, instagramHref, lineHref, mailtoHref, telHref } from "@/lib/links";
+import {
+  facebookHref,
+  instagramHref,
+  lineDisplay,
+  lineHref,
+  mailtoHref,
+  telHref,
+  whatsappHref,
+} from "@/lib/links";
 import type { Lang } from "@/lib/i18n";
 
 export default function Footer({ lang }: { lang: Lang }) {
   return (
-    <footer className="border-t border-blush/60 bg-shell/70 pt-14 pb-28 md:pb-14">
+    <footer className="border-t border-blush/60 bg-shell/70 pt-14 pb-[calc(7rem+env(safe-area-inset-bottom))] md:pb-14">
       <div className="container-x grid gap-10 md:grid-cols-3">
         <div>
           <span className="font-display text-[1.7rem] text-ink">
@@ -49,7 +57,12 @@ export default function Footer({ lang }: { lang: Lang }) {
             </li>
             <li>
               <a className="hover:text-ink" href={lineHref} target="_blank" rel="noopener noreferrer">
-                LINE · @{site.contact.lineId}
+                LINE · {lineDisplay}
+              </a>
+            </li>
+            <li>
+              <a className="hover:text-ink" href={whatsappHref(lang)} target="_blank" rel="noopener noreferrer">
+                WhatsApp · {site.contact.whatsappDisplay}
               </a>
             </li>
           </ul>

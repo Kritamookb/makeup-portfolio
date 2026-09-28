@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { site } from "@/content/site";
@@ -11,8 +11,8 @@ const copy = {
   eyebrow: { th: "ผลงาน", en: "Portfolio" },
   title: { th: "ผลงานที่ผ่านมา", en: "Selected work" },
   lead: {
-    th: "งานแต่งริมทะเล พิธีเช้าชุดไทย งานเลี้ยงกลางคืน และงานถ่ายแบบ — กดที่รูปเพื่อดูขนาดเต็ม",
-    en: "Beach weddings, Thai morning ceremonies, evening receptions and editorial shoots — tap any image to enlarge.",
+    th: "ลุคเจ้าสาว เพื่อนเจ้าสาว และงานถ่ายแบบ — กดที่รูปเพื่อดูขนาดเต็ม",
+    en: "Brides, bridesmaids and editorial looks — tap any image to enlarge.",
   },
   close: { th: "ปิด", en: "Close" },
   prev: { th: "รูปก่อนหน้า", en: "Previous image" },
@@ -23,8 +23,15 @@ const copy = {
 export default function Gallery({ lang }: { lang: Lang }) {
   const [filter, setFilter] = useState("all");
   const [active, setActive] = useState<number | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const isOpen = active !== null;
 
   const photos = site.gallery.filter((photo) => filter === "all" || photo.category === filter);
+  // หมวดที่ยังไม่มีรูปไม่ต้องโชว์ปุ่ม กดแล้วจะเจอหน้าว่าง
+  const filters = site.galleryFilters.filter(
+    (item) => item.id === "all" || site.gallery.some((photo) => photo.category === item.id),
+  );
 
   const step = useCallback(
     (delta: number) => {
@@ -43,6 +50,22 @@ export default function Gallery({ lang }: { lang: Lang }) {
       if (event.key === "Escape") setActive(null);
       if (event.key === "ArrowRight") step(1);
       if (event.key === "ArrowLeft") step(-1);
+      if (event.key === "Tab") keepFocusInside(event);
+    };
+
+    // กด Tab แล้ววนอยู่ในหน้าต่างรูป ไม่หลุดไปโดนปุ่มด้านหลัง
+    const keepFocusInside = (event: KeyboardEvent) => {
+      const buttons = dialogRef.current?.querySelectorAll<HTMLElement>("button");
+      if (!buttons?.length) return;
+      const first = buttons[0];
+      const last = buttons[buttons.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
 
     document.addEventListener("keydown", onKey);
@@ -52,6 +75,14 @@ export default function Gallery({ lang }: { lang: Lang }) {
       document.body.style.overflow = "";
     };
   }, [active, step]);
+
+  // เปิดแล้วย้ายโฟกัสเข้าหน้าต่าง ปิดแล้วคืนโฟกัสให้รูปที่กดเปิด
+  useEffect(() => {
+    if (!isOpen) return;
+    const opener = document.activeElement as HTMLElement | null;
+    closeRef.current?.focus();
+    return () => opener?.focus();
+  }, [isOpen]);
 
   return (
     <section id="portfolio" className="scroll-mt-24 bg-cream py-20 md:py-28">
@@ -65,7 +96,7 @@ export default function Gallery({ lang }: { lang: Lang }) {
         </Reveal>
 
         <div className="mt-10 flex flex-wrap justify-center gap-2">
-          {site.galleryFilters.map((item) => (
+          {filters.map((item) => (
             <button
               key={item.id}
               type="button"
@@ -85,7 +116,7 @@ export default function Gallery({ lang }: { lang: Lang }) {
           ))}
         </div>
 
-        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {photos.map((photo, index) => (
             <Reveal key={photo.src} delay={(index % 4) * 60}>
               <button
@@ -124,6 +155,7 @@ export default function Gallery({ lang }: { lang: Lang }) {
 
       {active !== null ? (
         <div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label={photos[active].caption[lang]}
@@ -131,6 +163,7 @@ export default function Gallery({ lang }: { lang: Lang }) {
           onClick={() => setActive(null)}
         >
           <button
+            ref={closeRef}
             type="button"
             onClick={() => setActive(null)}
             aria-label={copy.close[lang]}

@@ -20,18 +20,28 @@ export const site = {
     } as L,
   },
 
-  /** PLACEHOLDER: ช่องทางติดต่อจริง */
+  /** ช่องทางติดต่อ — ยืนยันกับผู้ว่าจ้างแล้วทุกช่อง */
   contact: {
-    phone: "0812345678",
-    phoneDisplay: "081-234-5678",
-    lineId: "bigjimakeup",
+    phone: "0642357251",
+    phoneDisplay: "064-235-7251",
+    /** WhatsApp — หน้าอังกฤษใช้เป็นช่องทางหลักแทน LINE (นักท่องเที่ยวส่วนใหญ่ไม่มี LINE) */
+    whatsapp: "0642356251",
+    whatsappDisplay: "064-235-6251",
+    /** LINE ส่วนตัว — ต้องเปิด "อนุญาตให้เพิ่มเพื่อนด้วย ID" ในแอป ไม่งั้นลิงก์ด้านล่างเพิ่มเพื่อนไม่ได้ */
+    lineId: "0962453692",
     /** ลิงก์เพิ่มเพื่อนไลน์ — ถ้าเป็น LINE OA ให้เปลี่ยนเป็น https://lin.ee/xxxxxxx */
-    lineUrl: "https://line.me/ti/p/~bigjimakeup",
+    lineUrl: "https://line.me/ti/p/~0962453692",
+    /**
+     * PLACEHOLDER: Basic ID ของ LINE OA (มี @ นำหน้า เช่น "@123abcde") — ดูได้ใน LINE OA Manager
+     * ใส่แล้วปุ่ม "ส่งผ่าน LINE" จะเปิดแชท OA พร้อมพิมพ์ข้อความจองไว้ให้ ลูกค้ากดส่งอย่างเดียว
+     * ปล่อย null = LINE ส่วนตัว ใช้วิธีคัดลอกแล้ววางเหมือนเดิม
+     */
+    lineOaId: null as string | null,
     instagram: "bigjimakeup",
-    instagramUrl: "https://instagram.com/bigjimakeup",
-    facebook: "Bigjimakeup",
-    facebookUrl: "https://facebook.com/bigjimakeup",
-    email: "hello@bigjimakeup.com",
+    instagramUrl: "https://www.instagram.com/bigjimakeup",
+    facebook: "Big.Yanphumsit",
+    facebookUrl: "https://www.facebook.com/Big.Yanphumsit",
+    email: "Yanphumsit@gmail.com",
     area: {
       th: "ภูเก็ต · พังงา · กระบี่ (เดินทางถึงที่)",
       en: "Phuket · Phang Nga · Krabi (on-location service)",
@@ -171,24 +181,20 @@ export const site = {
     { id: "editorial", label: { th: "ถ่ายแบบ", en: "Editorial" } as L },
   ],
 
-  /** PLACEHOLDER: แทนที่ไฟล์ใน /public/images/portfolio ด้วยรูปผลงานจริง (ชื่อไฟล์เดิม หรือแก้ src ตรงนี้) */
+  /**
+   * รูปผลงานจริง — เพิ่มรูปใหม่: วางไฟล์ 4:5 ใน /public/images/portfolio แล้วเพิ่มบรรทัดตรงนี้
+   * เปลี่ยนรูปให้ตั้งชื่อไฟล์ใหม่เสมอ ถ้าใช้ชื่อเดิม cache ของ next/image และเบราว์เซอร์จะโชว์รูปเก่าต่อ
+   * ปุ่มหมวดที่ยังไม่มีรูปจะถูกซ่อนเอง · ใส่ทีละ 4 รูป (4, 8, 12) จะเต็มแถวพอดีบนคอม
+   */
   gallery: [
-    { src: "/images/portfolio/01.jpg", category: "bridal", caption: { th: "เจ้าสาวริมทะเล · หาดสุรินทร์", en: "Beach bride · Surin Beach" } as L },
-    { src: "/images/portfolio/02.jpg", category: "editorial", caption: { th: "ถ่ายแบบลุคคลีน", en: "Clean editorial look" } as L },
-    { src: "/images/portfolio/03.jpg", category: "bridal", caption: { th: "พิธีเช้า ชุดไทย", en: "Thai ceremony, morning" } as L },
-    { src: "/images/portfolio/04.jpg", category: "event", caption: { th: "งานรับปริญญา", en: "Graduation day" } as L },
-    { src: "/images/portfolio/05.jpg", category: "bridal", caption: { th: "เจ้าสาวลุคโรแมนติก", en: "Romantic bridal" } as L },
-    { src: "/images/portfolio/06.jpg", category: "editorial", caption: { th: "แคมเปญรีสอร์ท", en: "Resort campaign" } as L },
-    { src: "/images/portfolio/07.jpg", category: "event", caption: { th: "งานเลี้ยงริมหาด", en: "Beach party" } as L },
-    { src: "/images/portfolio/08.jpg", category: "bridal", caption: { th: "งานเย็น ลุคจัดเต็ม", en: "Evening reception glam" } as L },
-    { src: "/images/portfolio/09.jpg", category: "editorial", caption: { th: "พรีเวดดิ้งในสตูดิโอ", en: "Studio pre-wedding" } as L },
-    { src: "/images/portfolio/10.jpg", category: "event", caption: { th: "งานบริษัท", en: "Corporate gala" } as L },
-    { src: "/images/portfolio/11.jpg", category: "bridal", caption: { th: "เพื่อนเจ้าสาว 6 ท่าน", en: "Bridal party of six" } as L },
-    { src: "/images/portfolio/12.jpg", category: "editorial", caption: { th: "ลุคแฟชั่นโทนอุ่น", en: "Warm-tone fashion" } as L },
+    { src: "/images/portfolio/bride-lace-veil.jpg", category: "bridal", caption: { th: "เจ้าสาวลุคคลาสสิก ผ้าคลุมลูกไม้", en: "Classic bride with lace veil" } as L },
+    { src: "/images/portfolio/glowing-nude.jpg", category: "editorial", caption: { th: "ลุคผิวฉ่ำ โทนนู้ด", en: "Glowing nude look" } as L },
+    { src: "/images/portfolio/natural-bride.jpg", category: "bridal", caption: { th: "เจ้าสาวลุคธรรมชาติ ก่อนพิธี", en: "Natural bridal look, getting ready" } as L },
+    { src: "/images/portfolio/bridesmaid-soft-glam.jpg", category: "bridal", caption: { th: "เพื่อนเจ้าสาว ลุคซอฟต์กลาม", en: "Bridesmaid soft glam" } as L },
   ],
 
   about: {
-    image: "/images/artist.jpg",
+    image: "/images/artist-bigji.jpg",
     heading: {
       th: "แต่งให้เป็นตัวคุณในวันที่สำคัญที่สุด",
       en: "Looking like yourself, on the day that matters most",
@@ -273,7 +279,7 @@ export const site = {
       role: { th: "งานรับปริญญา", en: "Graduation" } as L,
       quote: {
         th: "ไม่ค่อยชอบแต่งหน้าหนัก ๆ บอกไปแล้วช่างฟังจริง ออกมาใสมาก แต่ในรูปยังคมชัด ราคาก็บอกชัดตั้งแต่แรก",
-        en: "I do not like heavy makeup and she actually listened. It came out fresh but still sharp in photos, and the price was clear from the start.",
+        en: "I do not like heavy makeup and he actually listened. It came out fresh but still sharp in photos, and the price was clear from the start.",
       } as L,
     },
   ],
@@ -296,14 +302,14 @@ export const site = {
     {
       q: { th: "งานเช้ามากแต่งหน้าได้ไหม?", en: "Can you start very early?" } as L,
       a: {
-        th: "ได้ค่ะ พิธีเช้าหลายงานเริ่มแต่งตั้งแต่ตี 4–5 ไม่มีค่าใช้จ่ายเพิ่มสำหรับรอบเช้า",
+        th: "ได้ครับ พิธีเช้าหลายงานเริ่มแต่งตั้งแต่ตี 4–5 ไม่มีค่าใช้จ่ายเพิ่มสำหรับรอบเช้า",
         en: "Yes. Many morning ceremonies start at 4–5 AM, and there is no surcharge for early calls.",
       } as L,
     },
     {
       q: { th: "ผิวแพ้ง่ายใช้ได้ไหม?", en: "I have sensitive skin — is that a problem?" } as L,
       a: {
-        th: "แจ้งล่วงหน้าได้เลยค่ะ มีสินค้าสำหรับผิวแพ้ง่ายและปลอดน้ำหอม อุปกรณ์ทุกชิ้นทำความสะอาดก่อนใช้กับลูกค้าทุกคน",
+        th: "แจ้งล่วงหน้าได้เลยครับ มีสินค้าสำหรับผิวแพ้ง่ายและปลอดน้ำหอม อุปกรณ์ทุกชิ้นทำความสะอาดก่อนใช้กับลูกค้าทุกคน",
         en: "Just let me know. I carry fragrance-free products for sensitive skin, and every tool is sanitised between clients.",
       } as L,
     },

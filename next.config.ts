@@ -1,9 +1,6 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  async redirects() {
-    return [{ source: "/", destination: "/th", permanent: false }];
-  },
-};
+// หน้า / เลือกภาษาให้ที่ proxy.ts
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

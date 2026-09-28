@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, IBM_Plex_Sans_Thai, Noto_Serif_Thai } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "../globals.css";
 import Analytics from "@/components/Analytics";
 import { site } from "@/content/site";
 import { isLang, locales, type Lang } from "@/lib/i18n";
+import { phoneIntl } from "@/lib/links";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -27,6 +28,16 @@ const plexThai = IBM_Plex_Sans_Thai({
   display: "swap",
 });
 
+/**
+ * viewport-fit=cover ทำให้ env(safe-area-inset-*) มีค่าจริงบน iPhone
+ * แถบล่างจอเลยเว้นที่ให้แถบ Home ได้ — ด้านข้างกันรอยบากไว้ที่ .container-x
+ */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
@@ -48,7 +59,7 @@ export async function generateMetadata({
     description,
     alternates: {
       canonical: `/${lang}`,
-      languages: { th: "/th", en: "/en" },
+      languages: { th: "/th", en: "/en", "x-default": "/" },
     },
     openGraph: {
       type: "website",
@@ -72,7 +83,7 @@ function businessJsonLd(lang: Lang) {
     description: site.seo.description[lang],
     url: `${site.seo.url}/${lang}`,
     image: `${site.seo.url}/images/og.jpg`,
-    telephone: site.contact.phone,
+    telephone: phoneIntl,
     email: site.contact.email,
     priceRange: "฿฿฿",
     address: {
