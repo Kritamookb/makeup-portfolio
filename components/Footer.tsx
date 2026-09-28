@@ -1,10 +1,9 @@
+import CurrentYear from "@/components/CurrentYear";
 import { site } from "@/content/site";
 import { facebookHref, instagramHref, lineHref, mailtoHref, telHref } from "@/lib/links";
 import type { Lang } from "@/lib/i18n";
 
 export default function Footer({ lang }: { lang: Lang }) {
-  const year = new Date().getFullYear();
-
   return (
     <footer className="border-t border-blush/60 bg-shell/70 pt-14 pb-28 md:pb-14">
       <div className="container-x grid gap-10 md:grid-cols-3">
@@ -58,7 +57,7 @@ export default function Footer({ lang }: { lang: Lang }) {
       </div>
 
       <div className="container-x mt-12 border-t border-blush/60 pt-6 text-xs text-muted">
-        © {year} {site.brand.full[lang]}
+        © <CurrentYear initial={new Date().getFullYear()} /> {site.brand.full[lang]}
       </div>
     </footer>
   );

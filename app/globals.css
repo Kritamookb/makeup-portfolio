@@ -1,15 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  /* โทนสีหลัก — นู้ด ชมพูอ่อน ทอง */
+  /* โทนสีหลัก — นู้ด ชมพูอ่อน ทอง
+     clay / mauve / muted ใช้เป็นสีตัวหนังสือด้วย — ต้องเข้มพอให้ได้ 4.5:1 บนพื้น cream และ shell */
   --color-cream: #fbf7f4;
   --color-shell: #f4eae4;
   --color-blush: #ecccc5;
   --color-rose: #d99a93;
-  --color-clay: #b87c73;
-  --color-mauve: #8c6a6d;
+  --color-clay: #9c594f;
+  --color-mauve: #836366;
   --color-ink: #3d3033;
-  --color-muted: #7c6a6c;
+  --color-muted: #796769;
   --color-gold: #c3a86a;
   --font-display: var(--font-cormorant), var(--font-noto-serif-thai), Georgia, serif;
   --font-sans: var(--font-plex-thai), ui-sans-serif, system-ui, sans-serif;

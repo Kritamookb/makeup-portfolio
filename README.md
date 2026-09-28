@@ -33,7 +33,9 @@ public/images/          รูปทั้งหมด
 1. **ช่องทางติดต่อ** — `site.contact` (เบอร์, LINE, IG, FB, อีเมล)
    - ตอนนี้ยังเป็นค่าที่เดาจากชื่อแบรนด์ (`bigjimakeup`) ต้องให้ผู้ว่าจ้างยืนยันของจริงทุกช่อง
    - ถ้าเป็น LINE OA ให้เปลี่ยน `lineUrl` เป็นลิงก์ `https://lin.ee/xxxxxxx`
-2. **ราคาและแพ็กเกจ** — `site.services` (ตอนนี้เป็นราคาตลาดโดยประมาณ ต้องให้ผู้ว่าจ้างยืนยัน)
+2. **ราคาและแพ็กเกจ** — `site.services` ✓ ราคาผู้ว่าจ้างยืนยันแล้ว
+   - ถ้าแก้ราคา ต้องแก้ทั้ง `price` (ข้อความบนเว็บ) และ `amount` (ตัวเลขที่ส่งให้ Google)
+   - ราคาที่ขึ้นต้นว่า "เริ่มต้น" ให้ใส่ `fromPrice: true` ด้วย (Google จะเห็นเป็นราคาต่ำสุด)
 3. **รีวิว** — `site.testimonials` ต้องเป็นรีวิวจริง และขออนุญาตลูกค้าก่อนลงชื่อ
    - `site.rating` ตอนนี้เป็น `null` = ไม่ส่ง AggregateRating ให้ Google
      ใส่ได้เฉพาะตัวเลขจริงเท่านั้น ตัวเลขปลอมผิดนโยบายและโดน manual action ได้ทั้งเว็บ
@@ -83,10 +85,11 @@ event ที่ยิงไว้แล้ว — ตั้งเป็น conve
 
 | event | ยิงเมื่อ | พารามิเตอร์ |
 | --- | --- | --- |
-| `contact_line` | กดลิงก์ LINE ที่ไหนก็ได้ | `location` = id ของ section |
+| `contact_line` | กดลิงก์ LINE ที่ไหนก็ได้ | `location` = id ของ section หรือ `header` / `footer` / `mobile-bar` |
 | `contact_phone` | กดเบอร์โทร | `location` |
 | `contact_email` | กดอีเมล | `location` |
 | `contact_instagram` | กดลิงก์ IG | `location` |
+| `contact_facebook` | กดลิงก์ Facebook | `location` |
 | `booking_cta` | กดปุ่มที่พาไป `#booking` | `location` |
 | `booking_submit` | ส่งฟอร์มจอง | `method` = line/email/copy, `service` |
 

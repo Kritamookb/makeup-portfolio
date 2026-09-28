@@ -74,7 +74,7 @@ function businessJsonLd(lang: Lang) {
     image: `${site.seo.url}/images/og.jpg`,
     telephone: site.contact.phone,
     email: site.contact.email,
-    priceRange: "฿฿",
+    priceRange: "฿฿฿",
     address: {
       "@type": "PostalAddress",
       addressLocality: "Phuket",
@@ -96,6 +96,11 @@ function businessJsonLd(lang: Lang) {
       "@type": "Offer",
       name: service.name[lang],
       description: service.desc[lang],
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        ...("fromPrice" in service ? { minPrice: service.amount } : { price: service.amount }),
+        priceCurrency: "THB",
+      },
     })),
   };
 }

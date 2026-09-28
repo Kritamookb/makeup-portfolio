@@ -33,6 +33,10 @@ const copy = {
   sendMail: { th: "ส่งทางอีเมล", en: "Send by email" },
   copy: { th: "คัดลอกข้อความ", en: "Copy message" },
   copied: { th: "คัดลอกแล้ว — วางในแชทได้เลย", en: "Copied — paste it into the chat" },
+  copyFailed: {
+    th: "คัดลอกอัตโนมัติไม่สำเร็จ — กดค้างที่ข้อความด้านล่างเพื่อคัดลอก แล้ววางในแชท",
+    en: "Couldn't copy automatically — select the text below, copy it and paste it into the chat.",
+  },
   missing: {
     th: "กรอกชื่อ ช่องทางติดต่อ และวันที่จัดงานก่อนนะคะ",
     en: "Please add your name, a contact and the event date first.",
@@ -54,7 +58,7 @@ const EMPTY: Form = { name: "", contact: "", date: "", venue: "", service: "", p
 
 export default function Booking({ lang }: { lang: Lang }) {
   const [form, setForm] = useState<Form>(EMPTY);
-  const [status, setStatus] = useState<"idle" | "copied" | "missing">("idle");
+  const [status, setStatus] = useState<"idle" | "copied" | "copyFailed" | "missing">("idle");
 
   // การ์ดบริการด้านบนกดมาแล้วให้เลือกบริการนั้นไว้ให้เลย
   useEffect(() => {
@@ -89,37 +93,49 @@ export default function Booking({ lang }: { lang: Lang }) {
 
   const complete = Boolean(form.name && form.contact && form.date);
 
-  const copyMessage = async () => {
-    if (!complete) {
-      setStatus("missing");
-      return false;
-    }
+  const requireComplete = () => {
+    if (!complete) setStatus("missing");
+    return complete;
+  };
 
+  /**
+   * ต้องเรียกตรง ๆ ใน click handler ก่อน window.open และห้าม await อะไรก่อนหน้า
+   * ไม่งั้น Safari บล็อกการเปิด LINE และเบราว์เซอร์ไม่ยอมให้คัดลอกหลังหน้าเสียโฟกัส
+   */
+  const copyMessage = () => {
+    let copying: Promise<void>;
     try {
-      await navigator.clipboard.writeText(message);
-      setStatus("copied");
-    } catch {
-      setStatus("idle");
+      copying = navigator.clipboard.writeText(message);
+    } catch (error) {
+      // เว็บที่ไม่ใช่ https หรือเบราว์เซอร์เก่าไม่มี navigator.clipboard
+      copying = Promise.reject(error);
     }
-    return true;
+    copying.then(
+      () => setStatus("copied"),
+      () => setStatus("copyFailed"),
+    );
   };
 
   const submitted = (method: string) =>
     track("booking_submit", { method, service: form.service || "unspecified" });
 
-  const sendViaLine = async () => {
-    if (!(await copyMessage())) return;
+  const sendViaLine = () => {
+    if (!requireComplete()) return;
+    copyMessage();
     submitted("line");
     window.open(lineHref, "_blank", "noopener,noreferrer");
   };
 
   const sendViaMail = () => {
-    if (!complete) {
-      setStatus("missing");
-      return;
-    }
+    if (!requireComplete()) return;
     submitted("email");
     window.location.href = mailtoHref(lang, message);
+  };
+
+  const copyOnly = () => {
+    if (!requireComplete()) return;
+    copyMessage();
+    submitted("copy");
   };
 
   const field = "mt-1.5 w-full rounded-lg border border-blush bg-white/80 px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-rose focus:ring-2 focus:ring-rose/20";
@@ -138,7 +154,7 @@ export default function Booking({ lang }: { lang: Lang }) {
               className="grid gap-5 sm:grid-cols-2"
               onSubmit={(event) => {
                 event.preventDefault();
-                void sendViaLine();
+                sendViaLine();
               }}
             >
               <div>
@@ -220,11 +236,7 @@ export default function Booking({ lang }: { lang: Lang }) {
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
-                    void copyMessage().then((ok) => {
-                      if (ok) submitted("copy");
-                    });
-                  }}
+                  onClick={copyOnly}
                   className="text-sm text-mauve underline decoration-blush underline-offset-4 hover:text-ink"
                 >
                   {copy.copy[lang]}
@@ -234,10 +246,27 @@ export default function Booking({ lang }: { lang: Lang }) {
               <p
                 role="status"
                 aria-live="polite"
-                className={`text-sm sm:col-span-2 ${status === "missing" ? "text-clay" : "text-mauve"}`}
+                className={`text-sm sm:col-span-2 ${status === "missing" || status === "copyFailed" ? "text-clay" : "text-mauve"}`}
               >
-                {status === "copied" ? copy.copied[lang] : status === "missing" ? copy.missing[lang] : ""}
+                {status === "copied"
+                  ? copy.copied[lang]
+                  : status === "missing"
+                    ? copy.missing[lang]
+                    : status === "copyFailed"
+                      ? copy.copyFailed[lang]
+                      : ""}
               </p>
+
+              {status === "copyFailed" ? (
+                <textarea
+                  readOnly
+                  rows={9}
+                  aria-label={copy.copy[lang]}
+                  className={`${field} sm:col-span-2`}
+                  value={message}
+                  onFocus={(event) => event.currentTarget.select()}
+                />
+              ) : null}
             </form>
           </Reveal>
 
