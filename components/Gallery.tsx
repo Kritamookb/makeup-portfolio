@@ -105,7 +105,7 @@ export default function Gallery({ lang }: { lang: Lang }) {
                 setActive(null);
               }}
               aria-pressed={filter === item.id}
-              className={`rounded-full px-5 py-2 text-sm transition-colors ${
+              className={`rounded-full px-5 py-2 text-sm press ${
                 filter === item.id
                   ? "bg-ink text-cream"
                   : "border border-blush text-mauve hover:border-rose hover:text-ink"
@@ -122,14 +122,14 @@ export default function Gallery({ lang }: { lang: Lang }) {
               <button
                 type="button"
                 onClick={() => setActive(index)}
-                className="group relative block aspect-[4/5] w-full overflow-hidden rounded-xl bg-shell"
+                className="group relative block aspect-[4/5] w-full overflow-hidden rounded-xl bg-shell outline outline-1 -outline-offset-1 outline-black/10 press"
               >
                 <Image
                   src={photo.src}
                   alt={photo.caption[lang]}
                   fill
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover motion-safe:transition-[scale] motion-safe:duration-500 motion-safe:group-hover:scale-105"
                 />
                 <span className="absolute inset-0 flex items-end bg-gradient-to-t from-ink/70 via-ink/0 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                   <span className="text-left text-xs leading-snug text-cream">
@@ -188,7 +188,7 @@ export default function Gallery({ lang }: { lang: Lang }) {
             className="max-h-full w-full max-w-md"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl">
+            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl outline outline-1 -outline-offset-1 outline-white/10">
               <Image
                 src={photos[active].src}
                 alt={photos[active].caption[lang]}

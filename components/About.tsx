@@ -13,7 +13,7 @@ export default function About({ lang }: { lang: Lang }) {
       <div className="container-x grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <Reveal className="order-2 lg:order-1">
           <div className="relative mx-auto max-w-sm lg:max-w-md">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-[0_28px_50px_-30px_rgba(61,48,51,0.5)]">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl outline outline-1 -outline-offset-1 outline-black/10 shadow-[0_28px_50px_-30px_rgba(61,48,51,0.5)]">
               <Image
                 src={site.about.image}
                 alt={site.brand.artist[lang]}

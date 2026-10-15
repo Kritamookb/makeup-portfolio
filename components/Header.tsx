@@ -44,7 +44,7 @@ export default function Header({ lang }: { lang: Lang }) {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-300 ${
         scrolled || open
           ? "bg-cream/90 shadow-[0_1px_0_rgba(184,124,115,0.18)] backdrop-blur-md"
           : "bg-transparent"
@@ -66,7 +66,7 @@ export default function Header({ lang }: { lang: Lang }) {
             <a
               key={item.href}
               href={item.href}
-              className="relative text-sm text-mauve transition-colors hover:text-ink after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-rose after:transition-all hover:after:w-full"
+              className="relative text-sm text-mauve transition-colors hover:text-ink after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-rose motion-safe:after:transition-[width] hover:after:w-full"
             >
               {item.label[lang]}
             </a>
@@ -78,7 +78,7 @@ export default function Header({ lang }: { lang: Lang }) {
             href={`/${other(lang)}`}
             hrefLang={other(lang)}
             lang={other(lang)}
-            className="rounded-full border border-blush px-3 py-1.5 text-xs tracking-wider text-mauve th:tracking-normal transition-colors hover:border-rose hover:text-ink"
+            className="rounded-full border border-blush px-3 py-1.5 text-xs tracking-wider text-mauve th:tracking-normal press hover:border-rose hover:text-ink"
             aria-label={lang === "th" ? "Switch to English" : "เปลี่ยนเป็นภาษาไทย"}
           >
             {lang === "th" ? "EN" : "ไทย"}
@@ -86,7 +86,7 @@ export default function Header({ lang }: { lang: Lang }) {
 
           <a
             href="#booking"
-            className="hidden rounded-full bg-ink px-5 py-2.5 text-sm text-cream transition-colors hover:bg-clay sm:inline-block"
+            className="hidden rounded-full bg-ink px-5 py-2.5 text-sm text-cream press hover:bg-clay sm:inline-block"
           >
             {lang === "th" ? "จองคิว" : "Book now"}
           </a>
@@ -95,19 +95,19 @@ export default function Header({ lang }: { lang: Lang }) {
             ref={menuButtonRef}
             type="button"
             onClick={() => setOpen((value) => !value)}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-blush text-ink lg:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-blush text-ink press lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={lang === "th" ? "เมนู" : "Menu"}
           >
             <span className="relative block h-3 w-4">
               <span
-                className={`absolute left-0 h-px w-full bg-current transition-all ${
+                className={`absolute left-0 h-px w-full bg-current motion-safe:transition-[top,rotate] ${
                   open ? "top-1.5 rotate-45" : "top-0"
                 }`}
               />
               <span
-                className={`absolute left-0 h-px w-full bg-current transition-all ${
+                className={`absolute left-0 h-px w-full bg-current motion-safe:transition-[top,rotate] ${
                   open ? "top-1.5 -rotate-45" : "top-3"
                 }`}
               />
@@ -136,7 +136,7 @@ export default function Header({ lang }: { lang: Lang }) {
             <a
               href="#booking"
               onClick={() => setOpen(false)}
-              className="flex-1 rounded-full bg-ink px-5 py-3 text-center text-sm text-cream"
+              className="flex-1 rounded-full bg-ink px-5 py-3 text-center text-sm text-cream press"
             >
               {lang === "th" ? "จองคิว" : "Book now"}
             </a>
@@ -144,7 +144,7 @@ export default function Header({ lang }: { lang: Lang }) {
               href={primaryChat(lang).href}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 rounded-full border border-clay px-5 py-3 text-center text-sm text-clay"
+              className="flex-1 rounded-full border border-clay px-5 py-3 text-center text-sm text-clay press"
             >
               {primaryChat(lang).label}
             </a>

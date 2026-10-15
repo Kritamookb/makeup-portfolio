@@ -38,7 +38,7 @@ export default function Faq({ lang }: { lang: Lang }) {
                   {item.q[lang]}
                   <span
                     aria-hidden="true"
-                    className="shrink-0 text-xl leading-none text-rose transition-transform duration-300 group-open:rotate-45"
+                    className="shrink-0 text-xl leading-none text-rose motion-safe:transition-[rotate] duration-300 group-open:rotate-45"
                   >
                     +
                   </span>

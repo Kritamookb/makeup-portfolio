@@ -28,7 +28,7 @@ export default function Services({ lang }: { lang: Lang }) {
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {site.services.map((service, index) => (
             <Reveal key={service.id} delay={index * 60}>
-              <article className="group flex h-full flex-col rounded-2xl border border-blush/60 bg-white/70 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-rose/70 hover:shadow-[0_24px_40px_-28px_rgba(61,48,51,0.5)]">
+              <article className="group flex h-full flex-col rounded-2xl border border-blush/60 bg-white/70 p-7 transition-[translate,border-color,box-shadow] duration-300 motion-safe:hover:-translate-y-1 hover:border-rose/70 hover:shadow-[0_24px_40px_-28px_rgba(61,48,51,0.5)]">
                 <h3 className="font-display text-2xl font-normal text-ink">
                   {service.name[lang]}
                 </h3>
@@ -53,7 +53,7 @@ export default function Services({ lang }: { lang: Lang }) {
                   {copy.ask[lang]}
                   {/* ทุกการ์ดใช้ข้อความลิงก์เดียวกัน — บอกชื่อแพ็กเกจให้โปรแกรมอ่านหน้าจอแยกออก */}
                   <span className="sr-only">: {service.name[lang]}</span>
-                  <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
+                  <span aria-hidden="true" className="motion-safe:transition-[translate] motion-safe:group-hover:translate-x-1">
                     →
                   </span>
                 </a>

@@ -45,13 +45,13 @@ export default function Hero({ lang }: { lang: Lang }) {
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <a
               href="#booking"
-              className="rounded-full bg-ink px-7 py-3.5 text-sm tracking-wide text-cream th:tracking-normal transition-colors hover:bg-clay"
+              className="rounded-full bg-ink px-7 py-3.5 text-sm tracking-wide text-cream th:tracking-normal press hover:bg-clay"
             >
               {copy.book[lang]}
             </a>
             <a
               href="#portfolio"
-              className="rounded-full border border-clay/50 px-7 py-3.5 text-sm tracking-wide text-clay th:tracking-normal transition-colors hover:border-clay hover:bg-shell"
+              className="rounded-full border border-clay/50 px-7 py-3.5 text-sm tracking-wide text-clay th:tracking-normal press hover:border-clay hover:bg-shell"
             >
               {copy.portfolio[lang]}
             </a>
@@ -78,7 +78,7 @@ export default function Hero({ lang }: { lang: Lang }) {
         </div>
 
         <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-t-[14rem] rounded-b-3xl shadow-[0_30px_60px_-30px_rgba(61,48,51,0.45)]">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-t-[14rem] rounded-b-3xl outline outline-1 -outline-offset-1 outline-black/10 shadow-[0_30px_60px_-30px_rgba(61,48,51,0.45)]">
             <Image
               src="/images/hero-nude-glam.jpg"
               alt={

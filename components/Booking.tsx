@@ -209,7 +209,8 @@ export default function Booking({ lang }: { lang: Lang }) {
     submitted("copy");
   };
 
-  const field = "mt-1.5 w-full rounded-lg border border-blush bg-white/80 px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted focus:border-clay focus:ring-2 focus:ring-clay/25";
+  // ตัวหนังสือในช่องต่ำกว่า 16px บนมือถือ iOS Safari จะซูมทั้งหน้า · ขอบต้องเข้มพอได้ 3:1
+  const field = "mt-1.5 w-full rounded-lg border border-mauve/75 bg-white/80 px-4 py-3 text-base text-ink sm:text-sm outline-none transition-colors placeholder:text-muted focus:border-clay focus:ring-2 focus:ring-clay/25";
   const label = "block text-xs tracking-wide text-mauve uppercase th:tracking-normal";
 
   return (
@@ -303,21 +304,21 @@ export default function Booking({ lang }: { lang: Lang }) {
               <div className="flex flex-wrap items-center gap-3 sm:col-span-2">
                 <button
                   type="submit"
-                  className="rounded-full bg-ink px-7 py-3.5 text-sm text-cream transition-colors hover:bg-clay"
+                  className="rounded-full bg-ink px-7 py-3.5 text-sm text-cream press hover:bg-clay"
                 >
                   {primary.label}
                 </button>
                 <button
                   type="button"
                   onClick={secondary.send}
-                  className="rounded-full border border-clay/50 px-7 py-3.5 text-sm text-clay transition-colors hover:border-clay hover:bg-shell"
+                  className="rounded-full border border-clay/50 px-7 py-3.5 text-sm text-clay press hover:border-clay hover:bg-shell"
                 >
                   {secondary.label}
                 </button>
                 <button
                   type="button"
                   onClick={sendViaMail}
-                  className="rounded-full border border-clay/50 px-7 py-3.5 text-sm text-clay transition-colors hover:border-clay hover:bg-shell"
+                  className="rounded-full border border-clay/50 px-7 py-3.5 text-sm text-clay press hover:border-clay hover:bg-shell"
                 >
                   {copy.sendMail[lang]}
                 </button>

@@ -27,13 +27,13 @@ export default function NotFound() {
         <div className="mt-9 flex flex-wrap justify-center gap-3">
           <Link
             href="/th"
-            className="rounded-full bg-ink px-7 py-3.5 text-sm text-cream transition-colors hover:bg-clay"
+            className="rounded-full bg-ink px-7 py-3.5 text-sm text-cream press hover:bg-clay"
           >
             กลับหน้าแรก
           </Link>
           <Link
             href="/en"
-            className="rounded-full border border-clay/50 px-7 py-3.5 text-sm text-clay transition-colors hover:border-clay hover:bg-shell"
+            className="rounded-full border border-clay/50 px-7 py-3.5 text-sm text-clay press hover:border-clay hover:bg-shell"
           >
             English home
           </Link>
