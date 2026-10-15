@@ -126,9 +126,22 @@ export default function Booking({ lang }: { lang: Lang }) {
   // พิมพ์วันที่เองก็ข้าม min ได้ ต้องเช็กซ้ำตรงนี้
   const pastDate = Boolean(today && form.date && form.date < today);
 
+  // ช่องที่ยังไม่ผ่าน — ใส่ aria-invalid และผูกกับข้อความเตือนให้โปรแกรมอ่านหน้าจออ่านต่อกัน
+  const invalid = (key: "name" | "contact" | "date") =>
+    (status === "missing" && !form[key]) || (key === "date" && status === "pastDate");
+  const errorProps = (key: "name" | "contact" | "date") =>
+    invalid(key) ? { "aria-invalid": true, "aria-describedby": "booking-status" } : {};
+
   const requireComplete = () => {
-    if (!complete) setStatus("missing");
-    else if (pastDate) setStatus("pastDate");
+    const firstEmpty = (["name", "contact", "date"] as const).find((key) => !form[key]);
+    if (firstEmpty) {
+      setStatus("missing");
+      // ปุ่มรองข้ามการเช็ก required ของเบราว์เซอร์ — พาโฟกัสไปช่องที่ต้องกรอกเอง
+      document.getElementById(firstEmpty)?.focus();
+    } else if (pastDate) {
+      setStatus("pastDate");
+      document.getElementById("date")?.focus();
+    }
     return complete && !pastDate;
   };
 
@@ -196,7 +209,7 @@ export default function Booking({ lang }: { lang: Lang }) {
     submitted("copy");
   };
 
-  const field = "mt-1.5 w-full rounded-lg border border-blush bg-white/80 px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-rose focus:ring-2 focus:ring-rose/20";
+  const field = "mt-1.5 w-full rounded-lg border border-blush bg-white/80 px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted focus:border-clay focus:ring-2 focus:ring-clay/25";
   const label = "block text-xs tracking-wide text-mauve uppercase th:tracking-normal";
 
   return (
@@ -217,21 +230,21 @@ export default function Booking({ lang }: { lang: Lang }) {
             >
               <div>
                 <label className={label} htmlFor="name">
-                  {copy.fields.name[lang]} *
+                  {copy.fields.name[lang]} <span aria-hidden="true">*</span>
                 </label>
-                <input id="name" className={field} value={form.name} onChange={set("name")} required />
+                <input id="name" className={field} value={form.name} onChange={set("name")} required {...errorProps("name")} />
               </div>
 
               <div>
                 <label className={label} htmlFor="contact">
-                  {copy.fields.contact[lang]} *
+                  {copy.fields.contact[lang]} <span aria-hidden="true">*</span>
                 </label>
-                <input id="contact" className={field} value={form.contact} onChange={set("contact")} required />
+                <input id="contact" className={field} value={form.contact} onChange={set("contact")} required {...errorProps("contact")} />
               </div>
 
               <div>
                 <label className={label} htmlFor="date">
-                  {copy.fields.date[lang]} *
+                  {copy.fields.date[lang]} <span aria-hidden="true">*</span>
                 </label>
                 <input
                   id="date"
@@ -241,6 +254,7 @@ export default function Booking({ lang }: { lang: Lang }) {
                   value={form.date}
                   onChange={set("date")}
                   required
+                  {...errorProps("date")}
                 />
               </div>
 
@@ -317,6 +331,7 @@ export default function Booking({ lang }: { lang: Lang }) {
               </div>
 
               <p
+                id="booking-status"
                 role="status"
                 aria-live="polite"
                 className={`text-sm sm:col-span-2 ${status === "copied" || status === "chatOpened" ? "text-mauve" : "text-clay"}`}

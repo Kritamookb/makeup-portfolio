@@ -61,7 +61,7 @@ export default function Header({ lang }: { lang: Lang }) {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 lg:flex" aria-label="Main">
+        <nav className="hidden items-center gap-7 lg:flex" aria-label={lang === "th" ? "เมนูหลัก" : "Main"}>
           {NAV.map((item) => (
             <a
               key={item.href}
@@ -121,7 +121,7 @@ export default function Header({ lang }: { lang: Lang }) {
         hidden={!open}
         className="border-t border-blush/50 bg-cream/95 backdrop-blur-md lg:hidden"
       >
-        <nav className="container-x flex flex-col py-4" aria-label="Mobile">
+        <nav className="container-x flex flex-col py-4" aria-label={lang === "th" ? "เมนูมือถือ" : "Mobile menu"}>
           {NAV.map((item) => (
             <a
               key={item.href}

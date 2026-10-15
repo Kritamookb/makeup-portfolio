@@ -51,6 +51,8 @@ export default function Services({ lang }: { lang: Lang }) {
                   className="mt-6 inline-flex items-center gap-1.5 text-sm text-clay transition-colors group-hover:text-ink"
                 >
                   {copy.ask[lang]}
+                  {/* ทุกการ์ดใช้ข้อความลิงก์เดียวกัน — บอกชื่อแพ็กเกจให้โปรแกรมอ่านหน้าจอแยกออก */}
+                  <span className="sr-only">: {service.name[lang]}</span>
                   <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
                     →
                   </span>
