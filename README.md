@@ -16,8 +16,8 @@ app/[lang]/layout.tsx   root layout, ฟอนต์, metadata, JSON-LD (BeautyS
 proxy.ts                หน้า / เลือกภาษาจาก Accept-Language (ไทยอันดับแรก → /th, อื่น ๆ → /en)
 app/[lang]/page.tsx     ลำดับ section ของหน้าเดียวจบ
 app/[lang]/not-found.tsx  หน้า 404 สองภาษา
-app/icon.png            favicon (monogram ชั่วคราว — เปลี่ยนเป็นโลโก้จริงได้)
-app/apple-icon.png      ไอคอนตอนบันทึกลงจอโฮม iOS
+app/icon.svg, icon.png  favicon — monogram ตัว B ฟอนต์ Cormorant Garamond 600 สีครีมบนพื้น clay
+app/apple-icon.png      ไอคอนตอนบันทึกลงจอโฮม iOS (สี่เหลี่ยมเต็ม iOS ตัดมุมให้เอง)
 app/manifest.ts         web app manifest
 app/globals.css         โทนสีและฟอนต์ทั้งเว็บ (@theme ของ Tailwind 4)
 content/site.ts         ★ ข้อมูลทั้งเว็บอยู่ที่นี่ไฟล์เดียว
