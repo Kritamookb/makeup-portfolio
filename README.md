@@ -42,7 +42,7 @@ public/images/          รูปทั้งหมด
    - `site.rating` ตอนนี้เป็น `null` = ไม่ส่ง AggregateRating ให้ Google
      ใส่ได้เฉพาะตัวเลขจริงเท่านั้น ตัวเลขปลอมผิดนโยบายและโดน manual action ได้ทั้งเว็บ
    - `site.stats` (8+ ปี / 500+ เจ้าสาว / 4.9) และประวัติใน `site.about` ก็ยังเป็นของสมมติ ต้องยืนยันเช่นกัน
-4. **โดเมน** — `site.seo.url` ตอนนี้ตั้งไว้ `https://bigjimakeup.com` ถ้าใช้โดเมนอื่นต้องแก้ (มีผลกับ sitemap, OG, canonical)
+4. **โดเมน** — `site.seo.url` ✓ ยืนยันแล้ว `https://phuketbridalmakeupartist.com` (มีผลกับ sitemap, OG, canonical)
 5. **รูปภาพ** — ดูหัวข้อถัดไป
 
 ### รูปภาพ

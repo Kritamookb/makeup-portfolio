@@ -323,8 +323,8 @@ export const site = {
   ],
 
   seo: {
-    /** PLACEHOLDER: โดเมนจริงหลัง deploy */
-    url: "https://bigjimakeup.com",
+    /** โดเมนจริง — ยืนยันกับผู้ว่าจ้างแล้ว */
+    url: "https://phuketbridalmakeupartist.com",
     title: {
       th: "ช่างแต่งหน้าภูเก็ต · แต่งหน้าเจ้าสาว ถึงที่ | Bigjimakeup",
       en: "Phuket Makeup Artist · Bridal & Event Makeup | Bigjimakeup",
