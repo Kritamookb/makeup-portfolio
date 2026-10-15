@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, IBM_Plex_Sans_Thai, Noto_Serif_Thai } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import "../globals.css";
 import Analytics from "@/components/Analytics";
+import CookieConsent from "@/components/CookieConsent";
 import { site } from "@/content/site";
 import { isLang, locales, type Lang } from "@/lib/i18n";
 import { phoneIntl } from "@/lib/links";
@@ -128,7 +128,7 @@ export default async function RootLayout({
   // ถ้า throw ตรงนี้ not-found.tsx ของ segment เดียวกันจะไม่ถูกใช้
   const lang: Lang = isLang(raw) ? raw : "th";
 
-  // ยังไม่ได้ตั้งค่า = ไม่โหลดสคริปต์ GA เลย เว็บก็ยังทำงานปกติ
+  // ยังไม่ได้ตั้งค่า = ไม่โหลดสคริปต์ GA และไม่โชว์แถบถามคุกกี้ เว็บก็ยังทำงานปกติ
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
   return (
@@ -140,7 +140,7 @@ export default async function RootLayout({
         />
         {children}
         <Analytics />
-        {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
+        <CookieConsent lang={lang} gaId={gaId} />
       </body>
     </html>
   );

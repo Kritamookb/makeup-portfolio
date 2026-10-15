@@ -1,3 +1,4 @@
+import { CookieSettingsButton } from "@/components/CookieConsent";
 import CurrentYear from "@/components/CurrentYear";
 import { site } from "@/content/site";
 import {
@@ -69,8 +70,11 @@ export default function Footer({ lang }: { lang: Lang }) {
         </div>
       </div>
 
-      <div className="container-x mt-12 border-t border-blush/60 pt-6 text-xs text-muted">
-        © <CurrentYear initial={new Date().getFullYear()} /> {site.brand.full[lang]}
+      <div className="container-x mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-blush/60 pt-6 text-xs text-muted">
+        <span>
+          © <CurrentYear initial={new Date().getFullYear()} /> {site.brand.full[lang]}
+        </span>
+        {process.env.NEXT_PUBLIC_GA_ID ? <CookieSettingsButton lang={lang} /> : null}
       </div>
     </footer>
   );
