@@ -331,7 +331,7 @@ export const site = {
     } as L,
     description: {
       th: "ช่างแต่งหน้าเจ้าสาวมืออาชีพในภูเก็ต บริการถึงที่ทั้งโรงแรม รีสอร์ท และริมหาด แต่งทนตลอดวัน ดูเป็นผิวจริงในภาพถ่าย ประสบการณ์กว่า 8 ปี",
-      en: "Professional bridal and event makeup artist in Phuket. On-location service at hotels, resorts and beaches. Long-wearing, photograph-ready makeup with 8+ years of experience.",
+      en: "Bridal and event makeup artist in Phuket with 8+ years' experience. On-location at hotels, resorts and beaches. Long-wearing, photo-ready makeup.",
     } as L,
   },
 } as const;
