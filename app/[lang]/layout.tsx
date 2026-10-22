@@ -3,6 +3,7 @@ import { Cormorant_Garamond, IBM_Plex_Sans_Thai, Noto_Serif_Thai } from "next/fo
 import "../globals.css";
 import Analytics from "@/components/Analytics";
 import CookieConsent from "@/components/CookieConsent";
+import LanguageHint from "@/components/LanguageHint";
 import { site } from "@/content/site";
 import { isLang, locales, type Lang } from "@/lib/i18n";
 import { phoneIntl } from "@/lib/links";
@@ -59,7 +60,7 @@ export async function generateMetadata({
     description,
     alternates: {
       canonical: `/${lang}`,
-      languages: { th: "/th", en: "/en", "x-default": "/" },
+      languages: { th: "/th", en: "/en", "x-default": "/en" },
     },
     openGraph: {
       type: "website",
@@ -139,6 +140,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd(lang)) }}
         />
         {children}
+        {lang === "th" && <LanguageHint />}
         <Analytics />
         <CookieConsent lang={lang} gaId={gaId} />
       </body>

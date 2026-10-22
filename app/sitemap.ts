@@ -7,7 +7,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const languages = {
     th: `${site.seo.url}/th`,
     en: `${site.seo.url}/en`,
-    "x-default": site.seo.url,
+    // x-default = หน้าสำหรับคนที่ภาษาไม่ตรงกับ th/en → อังกฤษ (ไม่ใช่ / ที่ redirect)
+    "x-default": `${site.seo.url}/en`,
   };
 
   return locales.map((lang) => ({
