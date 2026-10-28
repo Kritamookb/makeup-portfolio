@@ -24,14 +24,15 @@ export default function Hero({ lang }: { lang: Lang }) {
   };
 
   return (
-    <section className="relative overflow-hidden pt-28 pb-20 md:pt-36 lg:flex lg:min-h-[100svh] lg:items-center lg:pb-28">
+    <section className="relative overflow-hidden pt-28 pb-16 md:pt-36 md:pb-20 lg:flex lg:min-h-[100svh] lg:items-center lg:pb-28">
       {/* พื้นหลังไล่สีนุ่ม ๆ */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(90%_70%_at_75%_10%,var(--color-shell)_0%,var(--color-cream)_60%)]"
       />
 
-      <div className="container-x grid items-center gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-10">
+      {/* มือถือ: รูปขึ้นก่อน — รูปคือสินค้า ต้องเห็นตั้งแต่จอแรก · จอใหญ่: ข้อความซ้าย รูปขวา */}
+      <div className="container-x grid items-center gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-10">
         <div className="relative z-10">
           <p className="eyebrow intro-fade" style={{ "--i": 0 } as React.CSSProperties}>
             {site.brand.tagline[lang]}
@@ -97,9 +98,9 @@ export default function Hero({ lang }: { lang: Lang }) {
           </p>
         </div>
 
-        <div className="relative mx-auto w-full max-w-md lg:mr-0 lg:max-w-[30rem]">
+        <div className="relative order-first mx-auto w-full max-w-md lg:order-none lg:mr-0 lg:max-w-[30rem]">
           <div className="intro-curtain">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-t-[14rem] rounded-b-3xl outline outline-1 -outline-offset-1 outline-black/10 shadow-[0_40px_80px_-40px_rgba(61,48,51,0.55)]">
+            <div className="relative aspect-[1/1.08] overflow-hidden rounded-t-[14rem] sm:aspect-[4/5] rounded-b-3xl outline outline-1 -outline-offset-1 outline-black/10 shadow-[0_40px_80px_-40px_rgba(61,48,51,0.55)]">
               <Parallax range="2.5rem" className="absolute -inset-y-12 inset-x-0">
                 <Image
                   src={site.hero.image}
@@ -118,7 +119,7 @@ export default function Hero({ lang }: { lang: Lang }) {
           </div>
 
           {/* รูปเล็กซ้อนมุมล่าง — เลื่อนสวนทางกับรูปใหญ่ให้ดูมีมิติ */}
-          <Parallax range="-3.5rem" className="absolute -bottom-10 -left-6 w-32 sm:-left-12 sm:w-40 lg:-left-20 lg:w-44">
+          <Parallax range="-3.5rem" className="absolute -bottom-8 -left-1 w-24 sm:-bottom-10 sm:-left-12 sm:w-40 lg:-left-20 lg:w-44">
             <div
               className="intro-fade aspect-[3/4] overflow-hidden rounded-2xl border-4 border-cream shadow-[0_24px_50px_-24px_rgba(61,48,51,0.6)]"
               style={{ "--i": 5 } as React.CSSProperties}
@@ -137,7 +138,7 @@ export default function Hero({ lang }: { lang: Lang }) {
           {/* ตราวงกลมหมุนช้า ๆ */}
           <div
             aria-hidden="true"
-            className="intro-fade absolute -top-8 -right-2 h-28 w-28 sm:-right-8 sm:h-32 sm:w-32"
+            className="intro-fade absolute -top-6 -right-1 h-24 w-24 sm:-top-8 sm:-right-8 sm:h-32 sm:w-32"
             style={{ "--i": 6 } as React.CSSProperties}
           >
             <svg viewBox="0 0 100 100" className="h-full w-full motion-safe:animate-[badge-spin_28s_linear_infinite]">

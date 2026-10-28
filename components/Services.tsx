@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { site } from "@/content/site";
@@ -18,9 +18,21 @@ const copy = {
   ask: { th: "สอบถามแพ็กเกจนี้", en: "Ask about this package" },
 };
 
+const WIDE = "(min-width: 768px)";
+
+function subscribeWide(callback: () => void) {
+  const query = window.matchMedia(WIDE);
+  query.addEventListener("change", callback);
+  return () => query.removeEventListener("change", callback);
+}
+
 /** รายการบริการแบบเมนูร้าน — จอที่มีเมาส์จะมีรูปลอยตามเคอร์เซอร์ตอนชี้แต่ละแถว */
 export default function Services({ lang }: { lang: Lang }) {
   const [hovered, setHovered] = useState<number | null>(null);
+  // มือถือเปิดได้ทีละแถว — แถวแรกเปิดไว้ให้เห็นว่ากดขยายได้ · จอใหญ่เปิดหมดเสมอ (ดู md:contents ด้านล่าง)
+  const [openRow, setOpenRow] = useState<number | null>(0);
+  // ฝั่งเซิร์ฟเวอร์ถือว่าเป็นมือถือ (มีปุ่ม) — จอใหญ่ CSS แสดงทุกแถวอยู่แล้ว เลยไม่กระพริบ
+  const wide = useSyncExternalStore(subscribeWide, () => window.matchMedia(WIDE).matches, () => false);
   const listRef = useRef<HTMLDivElement>(null);
   const floatRef = useRef<HTMLDivElement>(null);
 
@@ -82,7 +94,7 @@ export default function Services({ lang }: { lang: Lang }) {
             >
               <article
                 onPointerEnter={(event) => event.pointerType === "mouse" && setHovered(index)}
-                className="group relative grid gap-x-8 gap-y-4 py-8 md:grid-cols-[3rem_1.3fr_1fr_auto] md:items-baseline md:py-10"
+                className="service-row group relative py-6 md:py-10"
               >
                 {/* พื้นหลังไล่ขึ้นจากล่างตอนชี้ */}
                 <span
@@ -90,32 +102,68 @@ export default function Services({ lang }: { lang: Lang }) {
                   className="absolute inset-x-[-1.25rem] inset-y-0 -z-10 origin-bottom scale-y-0 rounded-lg bg-shell/70 motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-[var(--ease-silk)] group-hover:scale-y-100"
                 />
 
-                <span className="font-display text-lg text-rose italic">
+                <span className="font-display text-lg text-rose italic [grid-area:num]">
                   {String(index + 1).padStart(2, "0")}
                 </span>
 
-                <div>
-                  <h3 className="font-display text-3xl font-light text-ink motion-safe:transition-[translate] motion-safe:duration-500 motion-safe:ease-[var(--ease-silk)] md:text-[2.6rem] md:group-hover:translate-x-3">
-                    {service.name[lang]}
-                  </h3>
-                  <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">{service.desc[lang]}</p>
-                </div>
+                <h3 className="font-display text-[1.7rem] leading-tight font-light text-ink [grid-area:name] motion-safe:transition-[translate] motion-safe:duration-500 motion-safe:ease-[var(--ease-silk)] md:text-[2.6rem] md:group-hover:translate-x-3">
+                  {wide ? (
+                    service.name[lang]
+                  ) : (
+                    // มือถือ: แตะทั้งแถวเพื่อเปิด/ปิด (after: ขยายพื้นที่กดให้เต็มแถว)
+                    <button
+                      type="button"
+                      onClick={() => setOpenRow(openRow === index ? null : index)}
+                      aria-expanded={openRow === index}
+                      aria-controls={`service-${service.id}`}
+                      className="text-left after:absolute after:inset-0"
+                    >
+                      {service.name[lang]}
+                    </button>
+                  )}
+                </h3>
 
-                <ul className="space-y-2">
-                  {service.includes.map((item) => (
-                    <li key={item.en} className="flex gap-2.5 text-sm text-mauve">
-                      <span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 rounded-full bg-rose" />
-                      {item[lang]}
-                    </li>
-                  ))}
-                </ul>
+                <p className="mt-1 font-display text-xl text-clay [grid-area:price] md:mt-0 md:justify-self-end md:text-right md:text-2xl">
+                  {service.price[lang]}
+                </p>
 
-                <div className="flex flex-wrap items-baseline justify-between gap-4 md:flex-col md:items-end md:text-right">
-                  <p className="font-display text-2xl text-clay">{service.price[lang]}</p>
+                <span
+                  aria-hidden="true"
+                  className={`flex h-9 w-9 items-center justify-center self-center rounded-full border border-blush text-lg text-rose [grid-area:icon] motion-safe:transition-[rotate,background-color] motion-safe:duration-500 md:hidden ${
+                    openRow === index ? "rotate-45 bg-shell" : ""
+                  }`}
+                >
+                  +
+                </span>
+
+                {/* มือถือ: กล่องเดียวที่ซ่อน/เปิด · จอใหญ่: display:contents ให้ลูกแต่ละชิ้นไปลงช่องของตัวเองในกริด */}
+                <div
+                  id={`service-${service.id}`}
+                  className={`[grid-area:body] md:contents ${
+                    openRow === index ? "block motion-safe:animate-[intro-fade_0.6s_var(--ease-silk)_both]" : "hidden"
+                  }`}
+                >
+                  <div className="relative mt-5 aspect-[16/10] overflow-hidden rounded-xl md:hidden">
+                    <Image src={service.image} alt="" fill sizes="90vw" className="object-cover" />
+                  </div>
+
+                  <p className="mt-4 max-w-md text-sm leading-relaxed text-muted md:mt-0 md:[grid-area:desc]">
+                    {service.desc[lang]}
+                  </p>
+
+                  <ul className="mt-4 space-y-2 md:mt-0 md:[grid-area:inc]">
+                    {service.includes.map((item) => (
+                      <li key={item.en} className="flex gap-2.5 text-sm text-mauve">
+                        <span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 rounded-full bg-rose" />
+                        {item[lang]}
+                      </li>
+                    ))}
+                  </ul>
+
                   <a
                     href="#booking"
                     data-service={service.id}
-                    className="inline-flex items-center gap-1.5 text-sm text-mauve transition-colors hover:text-ink group-hover:text-ink"
+                    className="relative z-10 mt-5 inline-flex items-center gap-1.5 text-sm text-clay transition-colors hover:text-ink group-hover:text-ink md:mt-0 md:justify-self-end md:text-mauve md:[grid-area:ask]"
                   >
                     {copy.ask[lang]}
                     {/* ทุกแถวใช้ข้อความลิงก์เดียวกัน — บอกชื่อแพ็กเกจให้โปรแกรมอ่านหน้าจอแยกออก */}

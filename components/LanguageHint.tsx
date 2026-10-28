@@ -45,9 +45,9 @@ export default function LanguageHint() {
       lang="en"
       role="region"
       aria-label="Language"
-      className="fixed inset-x-3 top-[calc(4rem+0.5rem)] z-40 mx-auto flex max-w-md items-center gap-3 rounded-full border border-blush bg-cream/95 py-1.5 pr-1.5 pl-5 shadow-[0_16px_32px_-20px_rgba(61,48,51,0.45)] backdrop-blur-md md:top-[calc(5rem+0.75rem)]"
+      className="absolute inset-x-0 top-16 z-40 flex items-center gap-3 border-b border-blush bg-shell/95 py-1 pr-1 pl-5 backdrop-blur-md md:fixed md:inset-x-3 md:top-[calc(5rem+0.75rem)] md:mx-auto md:max-w-md md:rounded-full md:border md:bg-cream/95 md:py-1.5 md:pr-1.5 md:shadow-[0_16px_32px_-20px_rgba(61,48,51,0.45)]"
     >
-      <p className="flex-1 text-sm text-mauve">This page is in Thai.</p>
+      <p className="flex-1 text-xs text-mauve md:text-sm">This page is in Thai.</p>
       <Link
         href="/en"
         scroll={false}
@@ -56,7 +56,7 @@ export default function LanguageHint() {
           dismiss();
           jumpToTop();
         }}
-        className="rounded-full bg-ink px-4 py-2.5 text-sm whitespace-nowrap text-cream press hover:bg-clay"
+        className="rounded-full bg-ink px-3.5 py-1.5 text-xs whitespace-nowrap text-cream press hover:bg-clay md:px-4 md:py-2.5 md:text-sm"
       >
         View in English →
       </Link>

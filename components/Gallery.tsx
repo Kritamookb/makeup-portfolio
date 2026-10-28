@@ -150,14 +150,19 @@ export default function Gallery({ lang }: { lang: Lang }) {
             />
           </Reveal>
 
-          <div className="flex flex-wrap gap-x-6 gap-y-3" role="group" aria-label={copy.eyebrow[lang]}>
+          {/* มือถือ: แถวเดียวปัดข้างได้ ชิดขอบจอ · จอใหญ่: วางปกติ */}
+          <div
+            className="-mx-5 flex gap-x-6 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
+            role="group"
+            aria-label={copy.eyebrow[lang]}
+          >
             {filters.map((item) => (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => changeFilter(item.id)}
                 aria-pressed={filter === item.id}
-                className={`relative py-1 font-display text-xl italic transition-colors th:not-italic after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:bg-clay motion-safe:after:transition-transform motion-safe:after:duration-500 ${
+                className={`relative shrink-0 py-1 font-display text-xl whitespace-nowrap italic transition-colors th:not-italic after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:bg-clay motion-safe:after:transition-transform motion-safe:after:duration-500 ${
                   filter === item.id
                     ? "text-ink after:scale-x-100"
                     : "text-muted after:scale-x-0 hover:text-ink"
@@ -189,8 +194,8 @@ export default function Gallery({ lang }: { lang: Lang }) {
                   sizes="(max-width: 1024px) 50vw, 33vw"
                   className="object-cover motion-safe:transition-[scale] motion-safe:duration-[1.2s] motion-safe:ease-[var(--ease-silk)] motion-safe:group-hover:scale-[1.06]"
                 />
-                <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-ink/75 to-transparent p-4 pt-12 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100">
-                  <span className="translate-y-2 text-left text-sm leading-snug text-cream motion-safe:transition-[translate] motion-safe:duration-500 group-hover:translate-y-0">
+                <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-ink/75 to-transparent p-3 pt-10 transition-opacity duration-500 sm:p-4 sm:pt-12 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 group-focus-visible:opacity-100">
+                  <span className="text-left text-xs leading-snug text-cream motion-safe:transition-[translate] motion-safe:duration-500 sm:text-sm [@media(hover:hover)]:translate-y-2 [@media(hover:hover)]:group-hover:translate-y-0">
                     {photo.caption[lang]}
                   </span>
                   <span aria-hidden="true" className="font-display text-sm text-cream/70 italic">
