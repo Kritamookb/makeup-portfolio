@@ -20,6 +20,12 @@ export const site = {
     } as L,
   },
 
+  hero: {
+    image: "/images/hero-nude-glam.jpg",
+    /** MOCK: รูปเล็กที่ซ้อนมุมล่างของรูป hero — เปลี่ยนเป็นรูปจริง (แนวตั้ง 3:4) */
+    inset: "/images/mock/day-02.jpg",
+  },
+
   /** ช่องทางติดต่อ — ยืนยันกับผู้ว่าจ้างแล้วทุกช่อง */
   contact: {
     phone: "0642356251",
@@ -78,6 +84,8 @@ export const site = {
   services: [
     {
       id: "bridal",
+      /** MOCK: รูปที่ลอยตามเมาส์ในรายการบริการ — เปลี่ยนเป็นรูปจริงของแพ็กเกจนี้ */
+      image: "/images/mock/service-bridal.jpg",
       name: { th: "แต่งหน้าเจ้าสาว", en: "Bridal Makeup" } as L,
       price: { th: "เริ่มต้น 15,000 บาท", en: "From ฿15,000" } as L,
       /** ราคาตัวเลข (บาท) ที่ส่งให้ Google — แก้ price แล้วต้องแก้ตรงนี้ด้วย
@@ -96,6 +104,8 @@ export const site = {
     },
     {
       id: "bridal-party",
+      /** MOCK: รูปที่ลอยตามเมาส์ในรายการบริการ — เปลี่ยนเป็นรูปจริงของแพ็กเกจนี้ */
+      image: "/images/mock/service-party.jpg",
       name: { th: "เพื่อนเจ้าสาว & ครอบครัว", en: "Bridal Party & Family" } as L,
       price: { th: "ท่านละ 5,000 บาท", en: "฿5,000 per person" } as L,
       amount: 5000,
@@ -111,6 +121,8 @@ export const site = {
     },
     {
       id: "prewedding",
+      /** MOCK: รูปที่ลอยตามเมาส์ในรายการบริการ — เปลี่ยนเป็นรูปจริงของแพ็กเกจนี้ */
+      image: "/images/mock/service-prewedding.jpg",
       name: { th: "พรีเวดดิ้ง & ถ่ายภาพ", en: "Pre-wedding & Photoshoot" } as L,
       price: { th: "เริ่มต้น 8,000 บาท", en: "From ฿8,000" } as L,
       amount: 8000,
@@ -127,6 +139,8 @@ export const site = {
     },
     {
       id: "event",
+      /** MOCK: รูปที่ลอยตามเมาส์ในรายการบริการ — เปลี่ยนเป็นรูปจริงของแพ็กเกจนี้ */
+      image: "/images/mock/service-event.jpg",
       name: { th: "งานอีเวนต์ & งานเลี้ยง", en: "Events & Parties" } as L,
       price: { th: "เริ่มต้น 5,000 บาท", en: "From ฿5,000" } as L,
       amount: 5000,
@@ -143,6 +157,8 @@ export const site = {
     },
     {
       id: "lesson",
+      /** MOCK: รูปที่ลอยตามเมาส์ในรายการบริการ — เปลี่ยนเป็นรูปจริงของแพ็กเกจนี้ */
+      image: "/images/mock/service-lesson.jpg",
       name: { th: "คอร์สสอนแต่งหน้า", en: "Makeup Lessons" } as L,
       price: { th: "คอร์สละ 8,000 บาท", en: "฿8,000 per course" } as L,
       amount: 8000,
@@ -158,6 +174,8 @@ export const site = {
     },
     {
       id: "tourist",
+      /** MOCK: รูปที่ลอยตามเมาส์ในรายการบริการ — เปลี่ยนเป็นรูปจริงของแพ็กเกจนี้ */
+      image: "/images/mock/service-tourist.jpg",
       name: { th: "นักท่องเที่ยว & ถ่ายภาพหาด", en: "Holiday & Beach Shoots" } as L,
       price: { th: "เริ่มต้น 5,000 บาท", en: "From ฿5,000" } as L,
       amount: 5000,
@@ -182,16 +200,48 @@ export const site = {
   ],
 
   /**
-   * รูปผลงานจริง — เพิ่มรูปใหม่: วางไฟล์ 4:5 ใน /public/images/portfolio แล้วเพิ่มบรรทัดตรงนี้
+   * รูปผลงาน — เพิ่มรูปใหม่: วางไฟล์ใน /public/images/portfolio แล้วเพิ่มบรรทัดตรงนี้
+   * shape กำหนดขนาดช่องในกริดแบบนิตยสาร: "tall" (4:5), "square" (1:1), "wide" (3:2 กินสองช่อง)
    * เปลี่ยนรูปให้ตั้งชื่อไฟล์ใหม่เสมอ ถ้าใช้ชื่อเดิม cache ของ next/image และเบราว์เซอร์จะโชว์รูปเก่าต่อ
-   * ปุ่มหมวดที่ยังไม่มีรูปจะถูกซ่อนเอง · ใส่ทีละ 4 รูป (4, 8, 12) จะเต็มแถวพอดีบนคอม
+   * ปุ่มหมวดที่ยังไม่มีรูปจะถูกซ่อนเอง
+   * MOCK: ไฟล์ใน /images/mock/ เป็นรูปจำลองที่ตัดจากรูปเดิม — แทนที่ด้วยรูปจริงทั้งหมด
    */
   gallery: [
-    { src: "/images/portfolio/bride-lace-veil.jpg", category: "bridal", caption: { th: "เจ้าสาวลุคคลาสสิก ผ้าคลุมลูกไม้", en: "Classic bride with lace veil" } as L },
-    { src: "/images/portfolio/glowing-nude.jpg", category: "editorial", caption: { th: "ลุคผิวฉ่ำ โทนนู้ด", en: "Glowing nude look" } as L },
-    { src: "/images/portfolio/natural-bride.jpg", category: "bridal", caption: { th: "เจ้าสาวลุคธรรมชาติ ก่อนพิธี", en: "Natural bridal look, getting ready" } as L },
-    { src: "/images/portfolio/bridesmaid-soft-glam.jpg", category: "bridal", caption: { th: "เพื่อนเจ้าสาว ลุคซอฟต์กลาม", en: "Bridesmaid soft glam" } as L },
+    { src: "/images/portfolio/bride-lace-veil.jpg", shape: "tall", category: "bridal", caption: { th: "เจ้าสาวลุคคลาสสิก ผ้าคลุมลูกไม้", en: "Classic bride with lace veil" } as L },
+    { src: "/images/mock/gallery-04.jpg", shape: "wide", category: "bridal", caption: { th: "เพื่อนเจ้าสาว ก่อนพิธีริมหาด", en: "Bridesmaids before a beach ceremony" } as L },
+    { src: "/images/portfolio/glowing-nude.jpg", shape: "tall", category: "editorial", caption: { th: "ลุคผิวฉ่ำ โทนนู้ด", en: "Glowing nude look" } as L },
+    { src: "/images/mock/gallery-02.jpg", shape: "square", category: "bridal", caption: { th: "รายละเอียดลูกไม้ ขาวดำ", en: "Lace detail, black & white" } as L },
+    { src: "/images/mock/gallery-03.jpg", shape: "tall", category: "editorial", caption: { th: "ถ่ายแบบ ลุคแสงเช้า", en: "Editorial, morning light" } as L },
+    { src: "/images/portfolio/natural-bride.jpg", shape: "tall", category: "bridal", caption: { th: "เจ้าสาวลุคธรรมชาติ ก่อนพิธี", en: "Natural bridal look, getting ready" } as L },
+    { src: "/images/mock/gallery-06.jpg", shape: "square", category: "event", caption: { th: "งานเลี้ยงค่ำ ลุคซอฟต์กลาม", en: "Evening party, soft glam" } as L },
+    { src: "/images/mock/gallery-08.jpg", shape: "wide", category: "editorial", caption: { th: "พอร์ตเทรต ขาวดำ", en: "Portrait, black & white" } as L },
+    { src: "/images/portfolio/bridesmaid-soft-glam.jpg", shape: "tall", category: "bridal", caption: { th: "เพื่อนเจ้าสาว ลุคซอฟต์กลาม", en: "Bridesmaid soft glam" } as L },
+    { src: "/images/mock/gallery-01.jpg", shape: "tall", category: "event", caption: { th: "งานกาล่า ลุคกลามโทนนู้ด", en: "Gala, nude-toned glam" } as L },
+    { src: "/images/mock/gallery-07.jpg", shape: "tall", category: "bridal", caption: { th: "เจ้าสาวงานสากล", en: "Western ceremony bride" } as L },
+    { src: "/images/mock/gallery-05.jpg", shape: "tall", category: "event", caption: { th: "งานรับปริญญา", en: "Graduation day" } as L },
   ],
+
+  /**
+   * MOCK: รูปก่อน/หลังแต่งหน้า — "ก่อน" ตอนนี้จำลองด้วยการลดสีรูปเดิม
+   * ต้องเป็นคู่ที่ถ่ายมุมเดียวกัน แสงเดียวกัน ขนาด 4:5 และได้รับอนุญาตจากลูกค้าแล้ว
+   */
+  beforeAfter: [
+    { before: "/images/mock/before-veil.jpg", after: "/images/mock/after-veil.jpg", label: { th: "เจ้าสาว · ลุคคลาสสิก", en: "Bride · classic" } as L },
+    { before: "/images/mock/before-glow.jpg", after: "/images/mock/after-glow.jpg", label: { th: "ผิวฉ่ำ · โทนนู้ด", en: "Glow · nude tones" } as L },
+    { before: "/images/mock/before-natural.jpg", after: "/images/mock/after-natural.jpg", label: { th: "เจ้าสาว · ลุคธรรมชาติ", en: "Bride · natural" } as L },
+  ],
+
+  /** MOCK: เรื่องเล่างานแต่งหนึ่งงานแบบเลื่อนแนวนอน — เปลี่ยนเป็นรูปและเวลาจริงจากงานเดียวกัน */
+  story: {
+    title: { th: "หนึ่งวันกับเจ้าสาว ที่หาดกะตะ", en: "A day with a bride, Kata Beach" } as L,
+    frames: [
+      { src: "/images/mock/day-01.jpg", time: "05:00", caption: { th: "เตรียมผิว ก่อนพระอาทิตย์ขึ้น", en: "Skin prep before sunrise" } as L },
+      { src: "/images/mock/day-02.jpg", time: "06:30", caption: { th: "เบสบางเบา กันเหงื่อทั้งวัน", en: "A light, sweat-proof base" } as L },
+      { src: "/images/mock/day-03.jpg", time: "08:00", caption: { th: "ผ้าคลุมและเครื่องประดับ", en: "Veil and final details" } as L },
+      { src: "/images/mock/day-04.jpg", time: "10:00", caption: { th: "พิธีเช้า ริมทะเล", en: "Morning ceremony by the sea" } as L },
+      { src: "/images/mock/day-05.jpg", time: "17:30", caption: { th: "เก็บงานก่อนถ่ายรูปแสงเย็น", en: "Touch-up for golden hour" } as L },
+    ],
+  },
 
   about: {
     image: "/images/artist-bigji.jpg",

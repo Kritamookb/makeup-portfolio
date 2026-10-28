@@ -85,16 +85,267 @@
   }
 }
 
-/* ค่อย ๆ เฟดขึ้นตอนเลื่อนถึง — ปิดให้อัตโนมัติถ้าผู้ใช้ตั้งค่าลดการเคลื่อนไหว */
-.reveal {
-  opacity: 0;
-  transform: translateY(1.25rem);
-  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+/* ------------------------------------------------------------------
+   การเคลื่อนไหว — ทุกอย่างปิดเองถ้าผู้ใช้ตั้งค่าลดการเคลื่อนไหว (ดูท้ายไฟล์)
+   ------------------------------------------------------------------ */
+
+:root {
+  /* เส้นโค้งหลักของทั้งเว็บ — ออกเร็วแล้วค่อย ๆ หยุด ให้ความรู้สึกนุ่มแบบผ้าไหม */
+  --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.reveal[data-visible="true"] {
-  opacity: 1;
-  transform: none;
+@layer components {
+  /* Reveal — แต่ละแบบเลือกผ่าน data-variant ให้แต่ละส่วนของหน้าไม่ขยับเหมือนกันหมด */
+  .reveal {
+    transition:
+      opacity 0.9s var(--ease-silk),
+      transform 0.9s var(--ease-silk);
+  }
+
+  .reveal[data-variant="fade"] {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+
+  /* clip-path อยู่ที่ลูก ไม่ใช่ตัว .reveal — Chrome ไม่นับว่าเห็นถ้าตัวที่ถูก observe ถูกตัดหมด เลยไม่เคยเปิด
+     และใส่เฉพาะแบบที่ต้องใช้ — แบบอื่นห้ามมี เพราะจะตัดเงา วงแหวนโฟกัส และของที่ล้นกล่อง */
+
+  /* รูปถูกเปิดจากล่างขึ้นบน พร้อมรูปข้างในซูมออกเล็กน้อย */
+  .reveal[data-variant="wipe"] > * {
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 1.2s var(--ease-silk);
+    transition-delay: inherit;
+
+    & img {
+      scale: 1.15;
+      transition: scale 1.6s var(--ease-silk);
+    }
+  }
+
+  /* เปิดจากซ้ายไปขวา — ใช้กับแถวในรายการ */
+  .reveal[data-variant="slide"] > * {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transition:
+      opacity 0.9s var(--ease-silk),
+      clip-path 1.2s var(--ease-silk);
+    transition-delay: inherit;
+  }
+
+  .reveal[data-visible="true"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal[data-variant="wipe"][data-visible="true"] > * {
+    clip-path: inset(0 0 0 0);
+
+    & img {
+      scale: 1;
+    }
+  }
+
+  /* ขยายเกินกล่องเล็กน้อย พื้นหลังตอนชี้ของแถวบริการจะได้ไม่ถูกตัด */
+  .reveal[data-variant="slide"][data-visible="true"] > * {
+    opacity: 1;
+    clip-path: inset(0 -2rem 0 -2rem);
+  }
+
+  /* ข้อความลอยขึ้นจากหลังเส้นขอบ — ห่อด้วย .rise-wrap แล้วใส่ .rise ข้างใน · --i คือลำดับหน่วงเวลา */
+  .rise-wrap {
+    display: block;
+    overflow: hidden;
+    /* เผื่อพื้นที่สระบน/ล่างของภาษาไทยไม่ให้โดนตัด */
+    padding-block: 0.12em;
+    margin-block: -0.12em;
+  }
+
+  .rise {
+    display: block;
+    transform: translateY(110%);
+    transition: transform 1.1s var(--ease-silk);
+    transition-delay: calc(var(--i, 0) * 90ms + 120ms);
+  }
+
+  .reveal[data-visible="true"] .rise {
+    transform: none;
+  }
+
+  /* เส้นบาง ๆ ที่ค่อย ๆ ลากออกมา */
+  .draw {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.4s var(--ease-silk) 0.35s;
+  }
+
+  .draw-center {
+    transform-origin: center;
+  }
+
+  /* จุดที่ขยายเต็มตอนเลื่อนถึง */
+  .pop {
+    transform: scale(0);
+    transition: transform 0.6s var(--ease-silk);
+  }
+
+  .reveal[data-visible="true"] .pop {
+    transform: scale(1);
+  }
+
+  /* คำตอบ FAQ เลื่อนเปิด/ปิดนุ่ม ๆ — เบราว์เซอร์ที่ยังไม่รองรับก็เปิดทันทีเหมือนเดิม */
+  @media (prefers-reduced-motion: no-preference) {
+    :root {
+      interpolate-size: allow-keywords;
+    }
+
+    details::details-content {
+      block-size: 0;
+      overflow: hidden;
+      transition:
+        block-size 0.5s var(--ease-silk),
+        content-visibility 0.5s allow-discrete;
+    }
+
+    details[open]::details-content {
+      block-size: auto;
+    }
+  }
+
+  .reveal[data-visible="true"] .draw {
+    transform: scaleX(1);
+  }
+
+  /* Hero — เล่นทันทีตอนโหลดหน้า ไม่ต้องรอ JS */
+  .intro-rise {
+    display: block;
+    animation: intro-rise 1.2s var(--ease-silk) both;
+    animation-delay: calc(var(--i, 0) * 120ms + 150ms);
+  }
+
+  .intro-fade {
+    animation: intro-fade 1.2s var(--ease-silk) both;
+    animation-delay: calc(var(--i, 0) * 120ms + 400ms);
+  }
+
+  .intro-curtain {
+    animation: intro-curtain 1.2s var(--ease-silk) both;
+  }
+
+  .intro-zoom {
+    animation: intro-zoom 2.6s var(--ease-silk) 0.1s both;
+  }
+
+
+  /* Parallax — JS ใส่ --p ระหว่าง -1 ถึง 1 ตามตำแหน่งบนจอ · --range คือระยะเลื่อนสูงสุด */
+  .parallax {
+    translate: 0 calc(var(--p, 0) * var(--range, 3rem));
+    will-change: translate;
+  }
+
+  /* แถบตัวหนังสือวิ่ง */
+  .marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 40s linear infinite;
+  }
+
+  .marquee:hover {
+    animation-play-state: paused;
+  }
+
+  /* แสงวาวพาดผ่านรูปตอนชี้ — เหมือนไฮไลต์บนโหนกแก้ม */
+  .sheen {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        115deg,
+        transparent 35%,
+        rgb(255 245 238 / 0.32) 50%,
+        transparent 65%
+      );
+      translate: -120% 0;
+    }
+
+    &:hover::after {
+      translate: 120% 0;
+      transition: translate 1.1s var(--ease-silk);
+    }
+  }
+
+  /* ภาพเปิด/ปิด lightbox — View Transitions ใช้เส้นโค้งเดียวกับทั้งเว็บ */
+  ::view-transition-group(*) {
+    animation-duration: 0.55s;
+    animation-timing-function: var(--ease-silk);
+  }
+
+  /* เรื่องเล่าแนวนอน — จอใหญ่: ตรึงไว้แล้วเลื่อนข้าง · มือถือ: ปัดข้างธรรมดา */
+  .story-track {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .story-track > * {
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .story-pin {
+      height: var(--pin-height, 300vh);
+    }
+
+    .story-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .story-track {
+      overflow: visible;
+      will-change: transform;
+    }
+  }
+}
+
+@keyframes intro-rise {
+  from { transform: translateY(110%); }
+}
+
+@keyframes intro-fade {
+  from { opacity: 0; transform: translateY(1rem); }
+}
+
+@keyframes intro-curtain {
+  /* ไม่เริ่มจากปิดสนิท — รูป hero คือ LCP ต้องเห็นบางส่วนตั้งแต่เฟรมแรก */
+  from { clip-path: inset(35% 0 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes intro-zoom {
+  from { scale: 1.18; }
+}
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+@keyframes progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes badge-spin {
+  to { rotate: 360deg; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -102,9 +353,38 @@
     scroll-behavior: auto;
   }
 
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
+  .reveal,
+  .reveal > *,
+  .reveal img,
+  .rise,
+  .draw,
+  .pop {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    scale: 1 !important;
+    transition: none !important;
+  }
+
+  .intro-rise,
+  .intro-fade,
+  .intro-curtain,
+  .intro-zoom,
+  .marquee {
+    animation: none !important;
+  }
+
+  .parallax {
+    translate: none;
+  }
+
+  .sheen::after {
+    display: none;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }

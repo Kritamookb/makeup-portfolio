@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { site } from "@/content/site";
 import { primaryChat } from "@/lib/links";
+import { jumpToTop } from "@/lib/motion";
 import { other, type Lang } from "@/lib/i18n";
 
 const NAV = [
@@ -16,11 +17,21 @@ const NAV = [
 
 export default function Header({ lang }: { lang: Lang }) {
   const [scrolled, setScrolled] = useState(false);
+  // เลื่อนลงซ่อนแถบ เลื่อนขึ้นโผล่กลับ — รูปได้พื้นที่เต็มจอตอนดูผลงาน
+  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 24);
+      if (Math.abs(y - lastY) > 6) {
+        setHidden(y > lastY && y > 480);
+        lastY = y;
+      }
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -44,7 +55,9 @@ export default function Header({ lang }: { lang: Lang }) {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,backdrop-filter,translate] duration-500 ease-[var(--ease-silk)] ${
+        hidden && !open ? "motion-safe:-translate-y-full" : ""
+      } ${
         scrolled || open
           ? "bg-cream/90 shadow-[0_1px_0_rgba(184,124,115,0.18)] backdrop-blur-md"
           : "bg-transparent"
@@ -76,6 +89,8 @@ export default function Header({ lang }: { lang: Lang }) {
         <div className="flex items-center gap-2 md:gap-3">
           <Link
             href={`/${other(lang)}`}
+            scroll={false}
+            onClick={jumpToTop}
             hrefLang={other(lang)}
             lang={other(lang)}
             className="rounded-full border border-blush px-3 py-1.5 text-xs tracking-wider text-mauve th:tracking-normal press hover:border-rose hover:text-ink"

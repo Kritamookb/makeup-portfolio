@@ -217,7 +217,7 @@ export default function Booking({ lang }: { lang: Lang }) {
     <section id="booking" className="scroll-mt-20 bg-cream py-20 md:py-28">
       <div className="container-x">
         <Reveal>
-          <SectionHeading eyebrow={copy.eyebrow[lang]} title={copy.title[lang]} lead={copy.lead[lang]} />
+          <SectionHeading index="09" eyebrow={copy.eyebrow[lang]} title={copy.title[lang]} lead={copy.lead[lang]} />
         </Reveal>
 
         <div className="mx-auto mt-14 grid max-w-5xl gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-14">

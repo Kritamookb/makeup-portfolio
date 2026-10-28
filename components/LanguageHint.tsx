@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
+import { jumpToTop } from "@/lib/motion";
 
 /**
  * หน้า / พาไป /th เสมอ (redirect ถาวร ให้ Google index /th ได้) — นักท่องเที่ยวที่เบราว์เซอร์ไม่ใช่ภาษาไทย
@@ -49,8 +50,12 @@ export default function LanguageHint() {
       <p className="flex-1 text-sm text-mauve">This page is in Thai.</p>
       <Link
         href="/en"
+        scroll={false}
         hrefLang="en"
-        onClick={dismiss}
+        onClick={() => {
+          dismiss();
+          jumpToTop();
+        }}
         className="rounded-full bg-ink px-4 py-2.5 text-sm whitespace-nowrap text-cream press hover:bg-clay"
       >
         View in English →
