@@ -2,9 +2,17 @@
 
 เว็บ portfolio ช่างแต่งหน้าที่ภูเก็ต · Next.js 16 (App Router) + Tailwind CSS 4 · สองภาษา ไทย/อังกฤษ
 
+## สถานะ (Status)
+
+**Live — เว็บไซต์ลูกค้าที่ใช้งานจริง** · https://phuketbridalmakeupartist.com
+
+- ตรวจแล้วว่ารันอยู่บนเซิร์ฟเวอร์ของ Simify (29 ต.ค. 2026)
+- commit ล่าสุด 28 ต.ค. 2026 (mobile pass)
+- ยังมีเนื้อหาที่ต้องให้ผู้ว่าจ้างยืนยัน: รีวิว (`site.testimonials`), สถิติ (`site.stats`) และประวัติใน `site.about` — ดูหัวข้อ "สิ่งที่ต้องแก้ก่อนส่งงานจริง"
+
 ```bash
 npm install
-npm run dev     # http://localhost:3000 → redirect ไป /th หรือ /en ตามภาษาเบราว์เซอร์
+npm run dev     # http://localhost:3000 → redirect ถาวร (308) ไป /th
 npm run build   # ออกเป็นหน้า static ทั้ง /th และ /en
 npm run lint
 ```
@@ -13,7 +21,7 @@ npm run lint
 
 ```
 app/[lang]/layout.tsx   root layout, ฟอนต์, metadata, JSON-LD (BeautySalon)
-proxy.ts                หน้า / เลือกภาษาจาก Accept-Language (ไทยอันดับแรก → /th, อื่น ๆ → /en)
+proxy.ts                หน้า / redirect ถาวร (308) ไป /th เสมอ (นักท่องเที่ยวเห็นแถบ LanguageHint ชวนไป /en)
 app/[lang]/page.tsx     ลำดับ section ของหน้าเดียวจบ
 app/[lang]/not-found.tsx  หน้า 404 สองภาษา
 app/icon.svg, icon.png  favicon — monogram ตัว B ฟอนต์ Cormorant Garamond 600 สีครีมบนพื้น clay
@@ -64,15 +72,16 @@ public/images/          รูปทั้งหมด
 
 ## แบบฟอร์มจอง
 
-ฟอร์มไม่มี backend — ประกอบข้อความจากที่กรอก แล้วให้เลือกส่งต่อ 3 ทาง:
-ส่งผ่าน LINE / เปิดอีเมล / คัดลอกอย่างเดียว
+ฟอร์มไม่มี backend — ประกอบข้อความจากที่กรอก แล้วให้เลือกส่งต่อ 4 ทาง:
+ส่งผ่าน LINE / ส่งผ่าน WhatsApp / เปิดอีเมล / คัดลอกอย่างเดียว
+(ปุ่มหลักหน้าไทยคือ LINE หน้าอังกฤษคือ WhatsApp)
 
 ปุ่ม LINE: ถ้าตั้ง `site.contact.lineOaId` ไว้ จะเปิดแชท OA พร้อมข้อความที่พิมพ์ไว้ให้ (ลูกค้ากดส่งอย่างเดียว)
 ถ้าเป็น `null` (LINE ส่วนตัว) จะคัดลอกข้อความแล้วเปิด LINE ให้ลูกค้าวางเอง
 ไม่ต้องมีเซิร์ฟเวอร์ ไม่ต้องดูแลระบบ และไม่เก็บข้อมูลส่วนตัวของลูกค้าไว้ที่ไหน
 
 ถ้าภายหลังอยากได้ลีดเข้าอีเมลหรือ Google Sheet อัตโนมัติ ให้ต่อ endpoint
-(เช่น Formspree, Web3Forms, หรือ Route Handler ของ Next เอง) ในฟังก์ชัน `sendViaLine` / `sendViaMail`
+(เช่น Formspree, Web3Forms, หรือ Route Handler ของ Next เอง) ในฟังก์ชัน `sendViaLine` / `sendViaWhatsapp` / `sendViaMail`
 ที่ `components/Booking.tsx`
 
 ## การนับว่างานไหนมาจากเว็บ
@@ -118,12 +127,41 @@ event ที่ยิงไว้แล้ว — ตั้งเป็น conve
 
 ## SEO ที่ทำไว้แล้ว
 
-- หน้า static แยกภาษา `/th` `/en` พร้อม canonical และ hreflang (`x-default` ชี้ไป `/` ที่เลือกภาษาให้)
+- หน้า static แยกภาษา `/th` `/en` พร้อม canonical และ hreflang (`x-default` ชี้ไป `/en` ส่วน `/` redirect ไป `/th`)
 - JSON-LD `BeautySalon` (พื้นที่ให้บริการ ภูเก็ต/พังงา/กระบี่ + รายการบริการ) และ `FAQPage`
   (AggregateRating จะส่งก็ต่อเมื่อ `site.rating` ไม่ใช่ `null`)
 - OpenGraph / Twitter card, `sitemap.xml`, `robots.txt`
 
 ## Deploy
 
-ขึ้น Vercel ได้เลย (import repo → Deploy ไม่ต้องตั้งค่าอะไรเพิ่ม)
-อย่าลืมแก้ `site.seo.url` เป็นโดเมนจริงก่อน build รอบสุดท้าย
+เว็บจริงรันบนเซิร์ฟเวอร์ของ Simify ด้วย `next start` (Node 24 ตาม `.nvmrc`):
+
+```bash
+npm ci
+npm run build    # ต้องมี .env.local ที่มี NEXT_PUBLIC_GA_ID ตอน build ถ้าต้องการ GA
+npm run start
+```
+
+`next.config.mjs` ใช้ .mjs เพราะเซิร์ฟเวอร์ติดตั้งแค่ dependencies (ไม่มี typescript ตอน `next start`)
+ขึ้น Vercel ก็ได้เช่นกัน (import repo → Deploy)
+
+## Related repositories
+
+ไม่มี — repo นี้เป็นเว็บทั้งหมด (ไม่มี backend แยก)
+
+## ข้อมูลและความเป็นส่วนตัว (Demo & data policy)
+
+- ไม่มีฐานข้อมูลและไม่เก็บข้อมูลลูกค้า — ฟอร์มจองแค่สร้างข้อความให้ลูกค้าส่งเองทาง LINE / WhatsApp / อีเมล
+- รูปผลงานและรีวิวต้องได้รับอนุญาตจากลูกค้าก่อนเผยแพร่ ต้นฉบับรูป (`photos-original/`) ไม่ขึ้น git
+- GA โหลดหลังผู้ใช้ยินยอมคุกกี้เท่านั้น (PDPA)
+
+## ข้อจำกัด (Limitations)
+
+- ไม่มีระบบจองหรือปฏิทินจริง ช่างต้องยืนยันคิวเองในแชท และไม่รู้ว่าลูกค้ากดส่งข้อความจริงหรือไม่
+- เนื้อหาทั้งหมดแก้ในโค้ด (`content/site.ts`) ไม่มี CMS — ต้อง build และ deploy ใหม่ทุกครั้ง
+- รีวิว สถิติ และประวัติบางส่วนยังเป็นตัวอย่าง (`PLACEHOLDER`) จนกว่าผู้ว่าจ้างจะยืนยัน
+- ไม่มี automated tests (มีแค่ `npm run lint`)
+
+---
+
+Built and maintained by Simify — https://simify.dev
